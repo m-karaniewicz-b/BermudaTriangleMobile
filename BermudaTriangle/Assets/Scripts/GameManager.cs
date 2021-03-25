@@ -15,7 +15,8 @@ public class GameManager : MonoBehaviour
 
     public MovingTarget movingTargetPrefab;
 
-    private float midPointMaxOffset = 10;
+    private float midPointMaxOffsetX = 0;
+    private float midPointMaxOffsetY = 5;
     private float baseMovingTargetSpeed = 3f;
     private float targetStartDelay = 2f;
     private float spawnCooldown = 5f;
@@ -102,7 +103,9 @@ public class GameManager : MonoBehaviour
 
         Vector2 originPoint = camPos;
 
-        Vector2 midPoint = new Vector2(originPoint.x + Random.Range(-1f, 1f) * midPointMaxOffset, originPoint.y);
+        Vector2 midPoint = new Vector2(
+            originPoint.x + Random.Range(-1f, 1f) * midPointMaxOffsetX, 
+            originPoint.y + Random.Range(-1f, 1f) * midPointMaxOffsetY);
 
         Vector2 screenEdgePoint = GetRandomEdgePointFromRect(camRect);
         Vector2 edgeToMid = midPoint - screenEdgePoint;

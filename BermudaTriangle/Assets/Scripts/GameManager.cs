@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,8 +11,12 @@ public class GameManager : MonoBehaviour
     public int score = 0;
     public int hiScore = 0;
 
+    internal bool pauseState;
+
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI hiScoreText;
+
+    public GameObject PauseMenuParent;
 
     public MovingTarget movingTargetPrefab;
 
@@ -32,6 +37,8 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
 
         UpdateScoreDisplay();
+
+        PauseMenuParent.SetActive(false);
     }
 
     private void Start()
@@ -52,6 +59,28 @@ public class GameManager : MonoBehaviour
             lastSpawnTime = Time.time;
         }
 
+    }
+
+    public void SetPause(bool pause)
+    {
+        pauseState = pause;
+
+        PauseMenuParent.SetActive(pause);
+
+        if (pause)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
+    public void RestartGame()
+    {
+        Debug.Log("Game Restarted UWU");
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void UpdateScoreDisplay()

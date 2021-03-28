@@ -49,7 +49,7 @@ public class DragAndDrop : MonoBehaviour
             //RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, dragMask);
 
             RaycastHit2D hit = Physics2D.Raycast(GetTouchPosition(), Camera.main.transform.forward, Mathf.Infinity, dragMask);
-
+            
             if (hit.collider != null)
             {
                 AudioManager.instance.Play("PickUp");

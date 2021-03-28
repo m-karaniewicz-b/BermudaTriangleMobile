@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TouchInputManager : MonoBehaviour
+public class Selectable : MonoBehaviour
 {
-
-
 
 }

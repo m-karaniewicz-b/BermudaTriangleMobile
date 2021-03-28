@@ -139,6 +139,7 @@ public class GameManager : MonoBehaviour
         Vector2 screenEdgePoint = GetRandomEdgePointFromRect(camRect);
         Vector2 edgeToMid = midPoint - screenEdgePoint;
 
+        //FIX THIS
         float thisShouldBeLongEnough = 2 * Mathf.Sqrt((Mathf.Pow(Camera.main.orthographicSize * 2, 2) + Mathf.Pow(Camera.main.orthographicSize * 2 * Camera.main.aspect, 2)));
 
         Vector2 endPoint = edgeToMid * thisShouldBeLongEnough;

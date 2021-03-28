@@ -23,9 +23,7 @@ public class EyeCenter : MonoBehaviour
                     Activate();
                 }
             }
-
         }
-
     }
 
     public void Activate()

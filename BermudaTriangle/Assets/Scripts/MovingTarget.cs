@@ -20,6 +20,9 @@ public class MovingTarget : MonoBehaviour
 
     public LineRenderer line;
 
+    public ParticleSystem cloudVFX;
+    private float baseSmokeRate = 10;
+
     private void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
@@ -34,6 +37,9 @@ public class MovingTarget : MonoBehaviour
         movementSpeed = speed;
 
         transform.eulerAngles = new Vector3(0, 0, -Vector2.SignedAngle(direction, Vector2.up));
+
+        var emission = cloudVFX.emission;
+        emission.rateOverTime = movementSpeed * baseSmokeRate;
     }
 
     private void Update()

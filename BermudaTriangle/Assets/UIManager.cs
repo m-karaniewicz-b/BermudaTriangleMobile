@@ -26,7 +26,15 @@ public class UIManager : MonoBehaviour
         GameManager.instance.RestartGame();
     }
 
+    public void UIQuitGame()
+    {
+#if (UNITY_EDITOR)
+        UnityEditor.EditorApplication.isPlaying = false;
+#elif (UNITY_ANDROID)
+        Application.Quit();
+#endif
 
+    }
 
 
 }

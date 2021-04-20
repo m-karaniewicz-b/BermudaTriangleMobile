@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
 
     internal bool pauseState;
 
+    internal Rect playArea;
+
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI hiScoreText;
 
@@ -21,7 +23,7 @@ public class GameManager : MonoBehaviour
     public MovingTarget movingTargetPrefab;
 
     private float midPointMaxOffsetX = 0;
-    private float midPointMaxOffsetY = 5;
+    private float midPointMaxOffsetY = 5f;
     private float baseMovingTargetSpeed = 3f;
     private float targetStartDelay = 2f;
     private float spawnCooldown = 5f;
@@ -35,6 +37,14 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
         else Destroy(gameObject);
+
+        //float cameraHeight = Camera.main.orthographicSize * 2;
+        //float cameraWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
+
+        Vector2 playAreaSize = new Vector2(7f, 16f);
+        Vector2 playAreaCenterPos = Vector2.zero;
+
+        playArea = new Rect(playAreaCenterPos - playAreaSize/2, playAreaSize);
 
         UpdateScoreDisplay();
 
@@ -50,7 +60,7 @@ public class GameManager : MonoBehaviour
     {
         UpdateScoreDisplay();
 
-        if (Time.time - lastSpawnTime > spawnCooldown / (1 + score / 10))
+        if (Time.time - lastSpawnTime > spawnCooldown / (1 + score / 10f))
         {
             for (int i = 0; i < simultaneousSpawnCount; i++)
             {
@@ -81,6 +91,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game Restarted UWU");
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        throw new System.NotImplementedException();
     }
 
     public void UpdateScoreDisplay()
@@ -117,7 +128,7 @@ public class GameManager : MonoBehaviour
 
         MovingTarget target = Instantiate(movingTargetPrefab, start, Quaternion.identity);
 
-        target.Init(start, end, targetStartDelay / (1 + score / 10), baseMovingTargetSpeed * (1 + score / 10));
+        target.Init(start, end, targetStartDelay / (1 + score / 10f), baseMovingTargetSpeed * (1 + score / 10f));
 
     }
 
@@ -125,18 +136,13 @@ public class GameManager : MonoBehaviour
     {
         float startOffset = 2;
 
-        float cameraHeight = Camera.main.orthographicSize * 2;
-        float cameraWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
-        Vector2 camPos = Camera.main.transform.position;
-        Rect camRect = new Rect(camPos, new Vector2(cameraWidth, cameraHeight));
-
-        Vector2 originPoint = camPos;
+        Vector2 originPoint = playArea.center;
 
         Vector2 midPoint = new Vector2(
             originPoint.x + Random.Range(-1f, 1f) * midPointMaxOffsetX, 
             originPoint.y + Random.Range(-1f, 1f) * midPointMaxOffsetY);
 
-        Vector2 screenEdgePoint = GetRandomEdgePointFromRect(camRect);
+        Vector2 screenEdgePoint = GetRandomEdgePointFromRect(playArea);
         Vector2 edgeToMid = midPoint - screenEdgePoint;
 
         //FIX THIS
@@ -167,6 +173,11 @@ public class GameManager : MonoBehaviour
         }
 
         return edgePoint;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(playArea.center,playArea.size);
     }
 
     /*

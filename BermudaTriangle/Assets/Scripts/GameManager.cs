@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     internal bool pauseState;
 
     internal Rect playArea;
+    internal Rect camArea;
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI hiScoreText;
@@ -38,8 +39,11 @@ public class GameManager : MonoBehaviour
         }
         else Destroy(gameObject);
 
-        //float cameraHeight = Camera.main.orthographicSize * 2;
-        //float cameraWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
+        float cameraHeight = Camera.main.orthographicSize * 2;
+        float cameraWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
+
+        Vector2 camAreaSize = new Vector2(cameraWidth, cameraHeight);
+        camArea = new Rect((Vector2)Camera.main.transform.position - camAreaSize/2, camAreaSize);
 
         Vector2 playAreaSize = new Vector2(7f, 16f);
         Vector2 playAreaCenterPos = Vector2.zero;
@@ -64,15 +68,15 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < simultaneousSpawnCount; i++)
             {
-                CreateNewTargetPath();
+                CreateNewMovingTarget();
             }
             lastSpawnTime = Time.time;
         }
-
     }
-
     public void SetPause(bool pause)
     {
+        TouchManager.FlushTouchInput();
+
         pauseState = pause;
 
         PauseMenuParent.SetActive(pause);
@@ -86,20 +90,12 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
         }
     }
-
     public void RestartGame()
     {
         Debug.Log("Game Restarted UWU");
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         throw new System.NotImplementedException();
     }
-
-    public void UpdateScoreDisplay()
-    {
-        scoreText.text = score.ToString();
-        hiScoreText.text = hiScore.ToString();
-    }
-
     public void AddPoints(int amountAdded)
     {
         if (amountAdded > 0)
@@ -119,20 +115,21 @@ public class GameManager : MonoBehaviour
 
         UpdateScoreDisplay();
     }
-
-    private void CreateNewTargetPath()
+    private void UpdateScoreDisplay()
     {
-        Vector2[] linePos = CalculateTargetLine();
+        scoreText.text = score.ToString();
+        hiScoreText.text = hiScore.ToString();
+    }
+    private void CreateNewMovingTarget()
+    {
+        Vector2[] linePos = GenerateTargetLine();
         Vector2 start = linePos[0];
         Vector2 end = linePos[1];
 
-        MovingTarget target = Instantiate(movingTargetPrefab, start, Quaternion.identity);
-
-        target.Init(start, end, targetStartDelay / (1 + score / 10f), baseMovingTargetSpeed * (1 + score / 10f));
-
+        GetNewMovingTarget().Init(start, end, targetStartDelay / (1 + score / 10f), 
+            baseMovingTargetSpeed * (1 + score / 10f));
     }
-
-    private Vector2[] CalculateTargetLine()
+    private Vector2[] GenerateTargetLine()
     {
         float startOffset = 2;
 
@@ -156,8 +153,23 @@ public class GameManager : MonoBehaviour
         Vector2[] ret = { screenEdgePointOffsetted, endPoint };
         return ret;
     }
+    private MovingTarget GetNewMovingTarget()
+    {
+        MovingTarget ret = null;
 
-    public static Vector2 GetRandomEdgePointFromRect(Rect rect)
+        if (MovingTarget.respawnableMovingTargets.Count > 0)
+        {
+            ret = MovingTarget.respawnableMovingTargets[0];
+            MovingTarget.respawnableMovingTargets.Remove(ret);
+        }
+        else
+        {
+            ret = Instantiate(movingTargetPrefab);
+        }
+
+        return ret;
+    }
+    private static Vector2 GetRandomEdgePointFromRect(Rect rect)
     {
         Vector2 edgePoint = Vector2.zero;
 
@@ -174,7 +186,6 @@ public class GameManager : MonoBehaviour
 
         return edgePoint;
     }
-
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(playArea.center,playArea.size);

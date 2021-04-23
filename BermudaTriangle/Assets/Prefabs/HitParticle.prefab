@@ -2093,29 +2093,29 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: 0
-          outSlope: 0
+          inSlope: -1.425091
+          outSlope: -1.425091
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.46362785
         - serializedVersion: 3
-          time: 0.17501575
-          value: 0.7965948
-          inSlope: -2.0377755
-          outSlope: -2.0377755
+          time: 0.16101292
+          value: 0.7043989
+          inSlope: -2.236701
+          outSlope: -2.236701
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.8424673
+          outWeight: 0.70291144
         - serializedVersion: 3
-          time: 0.30540627
-          value: 0.18591976
-          inSlope: -0.41283807
-          outSlope: -0.41283807
+          time: 0.2603013
+          value: 0.43415067
+          inSlope: -2.236972
+          outSlope: -2.236972
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.5465782
+          inWeight: 0.5817204
           outWeight: 0.16253133
         - serializedVersion: 3
           time: 0.6524605
@@ -9669,8 +9669,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 750899751
+  m_SortingLayer: 1
   m_SortingOrder: 100
   m_RenderMode: 0
   m_SortMode: 0

@@ -10,7 +10,7 @@ public class Draggable : Clickable
     {
         if (heldObject == this)
         {
-            Vector2 newPos = TouchManager.GetTouchPosition();
+            Vector2 newPos = InputManager.GetCursorPosition();
 
             Rect dragArea = GameManager.instance.camArea;
 

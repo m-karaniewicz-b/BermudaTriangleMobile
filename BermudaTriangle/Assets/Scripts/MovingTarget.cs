@@ -52,7 +52,7 @@ public class MovingTarget : MonoBehaviour
                 if (hasBeenVisible && isActive)
                 {
                     DestroySelf();
-                    GameManager.instance.AddPoints(-scoreSubtractionOnEscape);
+                    GameManager.instance.ScoreAdd(-scoreSubtractionOnEscape);
                 }
             }
         }

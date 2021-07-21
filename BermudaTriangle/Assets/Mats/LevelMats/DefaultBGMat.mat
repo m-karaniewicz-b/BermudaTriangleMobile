@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BorderMat
-  m_Shader: {fileID: -6465566751694194690, guid: d186a88f1037a564184fc06b91954503,
+  m_Name: DefaultBGMat
+  m_Shader: {fileID: -6465566751694194690, guid: 661d6772b93a8a94888a598612eb8246,
     type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
@@ -25,9 +25,18 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_D1E0F243: 4
+    - Vector1_10970C8F: 0.33
+    - Vector1_2313FA59: 1
+    - Vector1_32AB186C: 10
+    - Vector1_3E0218EC: 10
+    - Vector1_438B68F7: 0.5
+    - Vector1_7094AB40: 1
+    - Vector1_76CD18F0: 0.7
+    - Vector1_D21534EE: 0.8
     m_Colors:
-    - Color_2A4253B9: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
+    - Color_802D1CCF: {r: 0.25, g: 0.25, b: 0.25, a: 1}
+    - Color_D53FAF32: {r: 0.3, g: 0.3, b: 0.3, a: 1}
+    - Color_FD1BDFD1: {r: 0.2, g: 0.2, b: 0.2, a: 1}
 --- !u!114 &9161254108771293927
 MonoBehaviour:
   m_ObjectHideFlags: 11

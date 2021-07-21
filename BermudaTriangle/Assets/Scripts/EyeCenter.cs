@@ -22,7 +22,7 @@ public class EyeCenter : Clickable
             for (int i = 0; i < targetList.Count; i++)
             {
                 targetList[i].DestroySelf();
-                GameManager.instance.AddPoints(1);
+                GameManager.instance.ScoreAdd(1);
                 //trgts.Add(targetList[i]);
                 //Debug.Log($"Destroying: {targetList[i].gameObject}");
             }

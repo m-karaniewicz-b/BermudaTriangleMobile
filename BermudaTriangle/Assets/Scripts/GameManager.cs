@@ -8,14 +8,15 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public int score = 0;
-    public int hiScore = 0;
+    internal int score = 0;
+    internal int hiScore = 0;
 
     internal bool pauseState;
 
     internal Rect playArea;
     internal Rect camArea;
 
+    [Header("References")]
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI hiScoreText;
 
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
         else Destroy(gameObject);
-
+        
         float cameraHeight = Camera.main.orthographicSize * 2;
         float cameraWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
 
@@ -51,7 +52,7 @@ public class GameManager : MonoBehaviour
         playArea = new Rect(playAreaCenterPos - playAreaSize/2, playAreaSize);
 
         UpdateScoreDisplay();
-
+        
         PauseMenuParent.SetActive(false);
     }
 
@@ -73,9 +74,11 @@ public class GameManager : MonoBehaviour
             lastSpawnTime = Time.time;
         }
     }
+
+    #region GameState
     public void SetPause(bool pause)
     {
-        TouchManager.FlushTouchInput();
+        InputManager.FlushInput();
 
         pauseState = pause;
 
@@ -96,7 +99,10 @@ public class GameManager : MonoBehaviour
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         throw new System.NotImplementedException();
     }
-    public void AddPoints(int amountAdded)
+    #endregion
+
+    #region Score
+    public void ScoreAdd(int amountAdded)
     {
         if (amountAdded > 0)
         {
@@ -120,6 +126,9 @@ public class GameManager : MonoBehaviour
         scoreText.text = score.ToString();
         hiScoreText.text = hiScore.ToString();
     }
+    #endregion
+
+    #region Spawning
     private void CreateNewMovingTarget()
     {
         Vector2[] linePos = GenerateTargetLine();
@@ -169,6 +178,16 @@ public class GameManager : MonoBehaviour
 
         return ret;
     }
+    #endregion
+
+    #region Levels
+    private void LevelCompleted()
+    {
+        LevelManager.instance.LoadLevelNext();
+    }
+
+    #endregion
+
     private static Vector2 GetRandomEdgePointFromRect(Rect rect)
     {
         Vector2 edgePoint = Vector2.zero;
@@ -186,6 +205,7 @@ public class GameManager : MonoBehaviour
 
         return edgePoint;
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(playArea.center,playArea.size);

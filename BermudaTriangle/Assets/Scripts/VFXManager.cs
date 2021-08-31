@@ -38,6 +38,23 @@ public class VFXManager : MonoBehaviour
 
     }
 
+    public static void SpawnParticleExplosionOneShot(ParticleSystem particle, Vector2 position, float radius)
+    {
+        if (particle != null)
+        {
+            ParticleSystem p = Instantiate(particle, position, Quaternion.identity, particleParent);
+            var main = p.main;
+            main.loop = false;
+            main.stopAction = ParticleSystemStopAction.Destroy;
+
+            var shape = p.shape;
+            shape.radius = radius;
+            p.Play();
+        }
+
+
+    }
+
     public static void DestroyAllParticles()
     {
         Destroy(particleParent.gameObject);

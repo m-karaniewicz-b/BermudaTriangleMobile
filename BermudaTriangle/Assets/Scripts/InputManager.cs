@@ -6,7 +6,7 @@ public class InputManager : MonoBehaviour
 {
     private void Update()
     {
-        if(GameManager.instance.pauseState != true)
+        if(GameManager.pauseState != true)
         {
             if(Application.isEditor)
             {

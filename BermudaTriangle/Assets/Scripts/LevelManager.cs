@@ -5,42 +5,55 @@ using Sirenix.OdinInspector;
 
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager instance;
-
-    internal LevelData currentLevelData;
+    private LevelData currentLevelData;
+    private int currentLevelID;
 
     public SpriteRenderer backgroundSR;
-    public SpriteRenderer[] borderSR;
+    public SpriteRenderer borderSR;
 
-    [AssetList(AutoPopulate = true, Path = "LevelData")]
     public LevelData[] levelList;
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
+        GameManager.OnGameSessionStart += LoadStartingLevel;
+        GameManager.OnLevelComplete += LoadLevelNext;
     }
 
-    public void SetLevelMaterials(LevelData level)
+    public void ForceSetLevelMaterials(LevelData level)
     {
         backgroundSR.material = level.backgroundMat;
-        foreach (SpriteRenderer item in borderSR)
-        {
-            item.material = level.borderMat;
-        }
+        borderSR.material = level.borderMat;
+    }
+
+    private void LoadLevelBackground(LevelData newLevel)
+    {
+        //TODO? Interpolation
+        ForceSetLevelMaterials(newLevel);
 
     }
 
-    public void LoadLevel(LevelData newLevel)
+    private void LoadStartingLevel()
     {
-        //?Interpolation
-        SetLevelMaterials(newLevel);
+        LoadLevel(0);
+    }
+
+    public void LoadLevel(int id)
+    {
+        currentLevelData = levelList[id];
+        currentLevelID = id;
+        LoadLevelBackground(currentLevelData);
     }
 
     public void LoadLevelNext()
     {
-
+        if (currentLevelID < levelList.Length)
+        {
+            LoadLevel(currentLevelID + 1);
+        }
+        else
+        {
+            LoadLevel(0);
+            Debug.Log("Level loop");
+        }
     }
 }

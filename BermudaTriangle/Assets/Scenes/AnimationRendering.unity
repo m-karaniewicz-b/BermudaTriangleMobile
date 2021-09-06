@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -327,6 +327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1653980991}
   - component: {fileID: 1653980992}
+  - component: {fileID: 1653980993}
   m_Layer: 0
   m_Name: RecordManager
   m_TagString: Untagged
@@ -355,16 +356,31 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1653980990}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f4014a76c876634786b2192133e7800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationName: 
-  folder: PNG_Animations
-  frameRate: 25
-  framesToCapture: 25
+  animationName: Transition
+  folder: TransitionRender
+  frameRate: 30
+  framesToCapture: 240
   pixelsToWorldUnit: 74.48276
+--- !u!114 &1653980993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653980990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3ebb2dd9d0ad7a40ad41c23045693bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  folderBaseName: Transition
+  frameRate: 30
+  framesToCapture: 150
 --- !u!1 &1913415761
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,7 +425,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b5a2e136545fb4ca816aa5fceda75a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 1
+  delay: 0.5
+  duration: 2
+  autoplay: 1
 --- !u!212 &1913415764
 SpriteRenderer:
   m_ObjectHideFlags: 0

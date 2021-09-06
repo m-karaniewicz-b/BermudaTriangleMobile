@@ -25,7 +25,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Progress: 0.356
+    - Progress: 0
     - Vector1_94FA8D99: 0
     - Vector1_E55EA4EC: 0
     m_Colors:

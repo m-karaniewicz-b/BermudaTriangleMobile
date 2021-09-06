@@ -7,17 +7,19 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    private const int LIFE_CONTAINER_MAXIMUM = 8;
+    private const int LEVEL_COMPLETE_THRESHOLD = 3;
+
     public static int livesCurrent;
     public static int livesMax;
-    private bool livesIsActive;
-    private const int LIFE_CONTAINER_MAXIMUM = 8;
-    private const int LEVEL_COMPLETE_THRESHOLD = 10;
+    private bool lifeSystemIsActive;
 
     public static int moneyTotal;
     public static int scoreCurrentLevel;
     public static int scoreTotal;
 
     public static bool pauseState;
+    public static bool levelLostFlag;
 
     public static Rect playArea;
     public static Rect camArea;
@@ -25,9 +27,11 @@ public class GameManager : MonoBehaviour
     public static Action OnGameSessionStart;
     public static Action OnLevelStart;
     public static Action OnLevelComplete;
+    public static Action OnLevelEnd;
     public static Action OnLevelLost;
+    public static Action OnExitMenu;
     public static Action<int> OnMoneyModified;
-    public static Action<bool> OnLivesIsActiveModified;
+    public static Action<bool> OnLifeSystemIsActiveModified;
     public static Action<int> OnLivesCurrentModified;
     public static Action<int> OnLivesMaxModified;
 
@@ -40,6 +44,9 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
 
         CalculatePlayArea();
+
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;
     }
 
     private void Start()
@@ -54,39 +61,68 @@ public class GameManager : MonoBehaviour
         moneyTotal = 0;
         scoreTotal = 0;
         scoreCurrentLevel = 0;
-        livesIsActive = false;
+        lifeSystemIsActive = false;
+        levelLostFlag = false;
 
         OnGameSessionStart?.Invoke();
 
-        SetLivesActive(true);
+        SetLifeSystemActive(true);
         SetLivesMax(3);
         SetLivesCurrent(3);
     }
 
-    private void LevelStart()
+    private void TryLevelComplete()
     {
-        scoreCurrentLevel = 0;
-
-
-
-        OnLevelStart?.Invoke();
+        StartCoroutine(TryLevelCompleteCoroutine());
     }
-
-    private void LevelComplete()
+    private IEnumerator TryLevelCompleteCoroutine()
     {
-        SetPauseState(true);
+        yield return new WaitForSeconds(1f);
 
-
-
+        if (levelLostFlag) yield return null;
         OnLevelComplete?.Invoke();
 
-        LevelStart();
+        float transitionDuration = TransitionUI.TRANSITION_DURATION;
+        yield return new WaitForSecondsRealtime(transitionDuration / 2);
+
+        SetPauseState(true);
+        OnLevelEnd?.Invoke();
+        //yield return new WaitForSecondsRealtime(transitionDuration / 2);
+
+        yield return null;
     }
 
     private void LevelLost()
     {
+        levelLostFlag = true;
+        SetPauseState(true);
         OnLevelLost?.Invoke();
-        GameOver();
+    }
+
+    public void ProceedToNewSession()
+    {
+        SetPauseState(false);
+        GameSessionInit();
+    }
+
+    public void ProceedToNextLevel()
+    {
+        StartCoroutine(ProceedToNextLevelCoroutine());
+    }
+    private IEnumerator ProceedToNextLevelCoroutine()
+    {
+        OnExitMenu?.Invoke();
+
+        float transitionDuration = TransitionUI.TRANSITION_DURATION;
+        yield return new WaitForSecondsRealtime(transitionDuration / 2);
+
+        scoreCurrentLevel = 0;
+        SetPauseState(false);
+
+        OnLevelStart?.Invoke();
+        //yield return new WaitForSecondsRealtime(transitionDuration / 2);
+
+        yield return null;
     }
 
     private void CalculatePlayArea()
@@ -115,27 +151,30 @@ public class GameManager : MonoBehaviour
 
     public void SetMoney(int newAmount)
     {
-        moneyTotal = newAmount;
         int diff = newAmount - moneyTotal;
-        if (diff > 0) scoreTotal += diff;
-        if (diff > 0) scoreCurrentLevel += diff;
+        moneyTotal = newAmount;
+        if (diff > 0)
+        {
+            scoreTotal += diff;
+            scoreCurrentLevel += diff;
+        }
         else moneyTotal = Mathf.Clamp(moneyTotal, 0, int.MaxValue);
 
-        if(scoreCurrentLevel >= LEVEL_COMPLETE_THRESHOLD) LevelComplete();
+        if (scoreCurrentLevel >= LEVEL_COMPLETE_THRESHOLD) TryLevelComplete();
 
         OnMoneyModified?.Invoke(moneyTotal);
     }
 
-    public void SetLivesActive(bool active)
+    public void SetLifeSystemActive(bool active)
     {
-        livesIsActive = active;
+        lifeSystemIsActive = active;
 
-        OnLivesIsActiveModified?.Invoke(active);
+        OnLifeSystemIsActiveModified?.Invoke(active);
     }
 
     public void SetLivesCurrent(int newCount)
     {
-        if(livesIsActive)
+        if (lifeSystemIsActive)
         {
             livesCurrent = newCount;
             if (livesCurrent <= 0) LevelLost();
@@ -147,7 +186,7 @@ public class GameManager : MonoBehaviour
 
     public void SetLivesMax(int newCount)
     {
-        if (livesIsActive)
+        if (lifeSystemIsActive)
         {
             livesMax = newCount;
             livesMax = Mathf.Clamp(livesMax, 1, LIFE_CONTAINER_MAXIMUM);
@@ -155,13 +194,6 @@ public class GameManager : MonoBehaviour
             if (livesMax < livesCurrent) SetLivesCurrent(livesMax);
             OnLivesMaxModified?.Invoke(livesMax);
         }
-    }
-
-    private void GameOver()
-    {
-        Debug.Log("Game lost");
-
-        GameSessionInit();
     }
 
     private void OnDrawGizmos()

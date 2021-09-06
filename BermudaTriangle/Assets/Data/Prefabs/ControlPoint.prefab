@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8395501300942256231
 Transform:
   m_ObjectHideFlags: 0
@@ -5114,7 +5114,7 @@ GameObject:
   - component: {fileID: 8951890758634488181}
   - component: {fileID: 8935154408927517714}
   m_Layer: 8
-  m_Name: Point
+  m_Name: ControlPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

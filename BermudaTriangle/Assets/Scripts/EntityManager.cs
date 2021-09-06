@@ -6,53 +6,136 @@ public class EntityManager : MonoBehaviour
 {
     private Rect playArea;
 
-    public List<EnemyTypeData> availableEnemyTypes;
+    //private Dictionary<EnemyTypeData, int> enemyTypeWeights;
+    private List<SpawnGroup> spawnGroups = new List<SpawnGroup>();
 
     public MovingTarget movingTargetPrefab;
+
+    internal EyeCenter theEye;
 
     private float midPointMaxOffsetX = 0;
     private float midPointMaxOffsetY = 5f;
 
-    private float targetStartDelay = 2f;
-    private float spawnCooldown = 5f;
-    private int simultaneousSpawnCount = 1;
+    private float moveBackOutOfSightOffset = 2;
+    private float indicatorEndPointOffset;
 
+    private float initialSpawnCooldown = 5f;
+
+    private float currentSpawnCooldown;
     private float lastSpawnTime = -Mathf.Infinity;
 
-    int score;
+    private void Awake()
+    {
+        theEye = FindObjectOfType<EyeCenter>();
+        LevelManager.OnLevelLoaded += LoadSpawnGroupList;
+
+        currentSpawnCooldown = initialSpawnCooldown;
+    }
 
     private void Start()
     {
         playArea = GameManager.playArea;
+
+        //Better idea for offset?
+        indicatorEndPointOffset = 2 * Mathf.Sqrt(Mathf.Pow(Camera.main.orthographicSize * 2, 2) +
+                    Mathf.Pow(Camera.main.orthographicSize * 2 * Camera.main.aspect, 2));
     }
 
     private void Update()
     {
-        score = GameManager.moneyTotal;
-        if (Time.time - lastSpawnTime > spawnCooldown / (1 + score / 10f))
+        if (Time.time - lastSpawnTime > currentSpawnCooldown)
         {
-            for (int i = 0; i < simultaneousSpawnCount; i++)
+            SpawnGroup spGroup = SelectRandomSpawnGroup();
+
+            currentSpawnCooldown = spGroup.globalSpawnCooldown;
+
+            EnemyTypeData selectedEnemyType = spGroup.enemyType;
+            int count = spGroup.instanceCount;
+            for (int i = 0; i < count; i++)
             {
-                CreateNewMovingTarget();
+                CreateEnemy(selectedEnemyType);
             }
+
             lastSpawnTime = Time.time;
         }
     }
 
-    private void CreateNewMovingTarget()
+    private void LoadSpawnGroupList(LevelData data)
     {
-        Vector2[] linePos = GenerateTargetLine();
+        spawnGroups = data.spawnGroups;
+    }
+
+    private SpawnGroup SelectRandomSpawnGroup()
+    {
+        List<SpawnGroup> allowedSpawnGroups = new List<SpawnGroup>();
+
+        foreach (SpawnGroup entry in spawnGroups)
+        {
+            if(entry.minLevelScore <= GameManager.scoreCurrentLevel 
+                && entry.maxLevelScore > GameManager.scoreCurrentLevel)
+            {
+                allowedSpawnGroups.Add(entry);
+            }
+        }
+
+        int sum = 0;
+
+        foreach(SpawnGroup entry in allowedSpawnGroups)
+        {
+            sum += entry.weight;
+        }
+
+        int randomNumber = Random.Range(0,sum) + 1;
+
+        int iter = 0;
+
+        for (int i = 0; i < allowedSpawnGroups.Count; i++)
+        {
+            iter += spawnGroups[i].weight;
+            if(iter >= randomNumber) return spawnGroups[i];
+        }
+
+        return null;
+    }
+
+    private void CreateEnemy(EnemyTypeData enemyType)
+    {
+        Vector2[] linePos = null;
+
+        switch (enemyType.trajectory)
+        {
+            case EntityTrajectory.random:
+                {
+                    linePos = GenerateLineCrossingPlayArea();
+                    break;
+                }
+            case EntityTrajectory.throughTheEye:
+                {
+                    linePos = GenerateLineThroughTheEye();
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
+
+        if (linePos == null)
+        {
+            Debug.LogError("No trajectory determined.");
+            return;
+        }
+
         Vector2 start = linePos[0];
         Vector2 end = linePos[1];
 
+        GetNewMovingTargetFromPool().Init(start, end, enemyType);
+
         //GetNewMovingTargetFromPool().Init(start, end, targetStartDelay / (1 + score / 10f), baseMovingTargetSpeed * (1 + score / 10f));
-        GetNewMovingTargetFromPool().Init(start, end, targetStartDelay, availableEnemyTypes[Random.Range(0, availableEnemyTypes.Count)]);
     }
 
-    private Vector2[] GenerateTargetLine()
+    private Vector2[] GenerateLineCrossingPlayArea()
     {
-        float startOffset = 2;
-
         Vector2 originPoint = playArea.center;
 
         Vector2 midPoint = new Vector2(
@@ -62,11 +145,23 @@ public class EntityManager : MonoBehaviour
         Vector2 screenEdgePoint = GetRandomEdgePointFromRect(playArea);
         Vector2 edgeToMid = midPoint - screenEdgePoint;
 
-        //FIX THIS
-        float thisShouldBeLongEnough = 2 * Mathf.Sqrt((Mathf.Pow(Camera.main.orthographicSize * 2, 2) + Mathf.Pow(Camera.main.orthographicSize * 2 * Camera.main.aspect, 2)));
+        Vector2 endPoint = edgeToMid * indicatorEndPointOffset;
+        Vector2 screenEdgePointOffsetted = screenEdgePoint - moveBackOutOfSightOffset * edgeToMid.normalized;
 
-        Vector2 endPoint = edgeToMid * thisShouldBeLongEnough;
-        Vector2 screenEdgePointOffsetted = screenEdgePoint - startOffset * edgeToMid.normalized;
+        Debug.DrawLine(screenEdgePointOffsetted, endPoint, Color.red);
+
+        Vector2[] ret = { screenEdgePointOffsetted, endPoint };
+        return ret;
+    }
+    private Vector2[] GenerateLineThroughTheEye()
+    {
+        Vector2 midPoint = theEye.transform.position;
+
+        Vector2 screenEdgePoint = GetRandomEdgePointFromRect(playArea);
+        Vector2 edgeToMid = midPoint - screenEdgePoint;
+
+        Vector2 endPoint = edgeToMid * indicatorEndPointOffset;
+        Vector2 screenEdgePointOffsetted = screenEdgePoint - moveBackOutOfSightOffset * edgeToMid.normalized;
 
         Debug.DrawLine(screenEdgePointOffsetted, endPoint, Color.red);
 

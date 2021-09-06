@@ -4,30 +4,42 @@ using UnityEngine;
 
 public class MovingTarget : MonoBehaviour
 {
-    private EnemyTypeData type;
-
-    private int scoreAwardOnDestroy = 1;
-    private int scoreSubtractionOnEscape = 0;
-    private int lifeSubtractionOnEscape = 1;
+    internal EnemyTypeData enemyType;
 
     public static List<MovingTarget> respawnableMovingTargets = new List<MovingTarget>();
 
     internal bool isActive = false;
 
-    private SpriteRenderer sr;
-
+    [Header("References")]
     public GameObject mainBody;
     public LineRenderer line;
     public ParticleSystem particleTrail;
+    private SpriteRenderer sr;
 
-    private const float PRTCL_TRAIL_BASE_RATE = 10;
+    private const float START_DELAY_DEFAULT = 2f;
 
     private float creationTime = -Mathf.Infinity;
     private bool hasBeenVisible = false;
 
-    private Vector2 direction;
-    private float movementSpeed;
     private float startDelay = Mathf.Infinity;
+    private Vector2 direction;
+
+    private float movementSpeed = 3;
+    private int lifeModOnKill = 0;
+    private int lifeModOnEscape = 0;
+    private int lifeModOnEyeCollision = 0;
+    private int pointModOnKill = 1;
+    private int pointModOnEscape = 0;
+    private int pointModOnEyeCollision = 0;
+    private bool canBeKilled = true;
+    private bool collideWithEye = false;
+    private bool destroyOnEyeCollision = false;
+
+    //Visuals
+    private const float PRTCL_TRAIL_BASE_RATE = 10f;
+    private Color color1;
+    private Color color2;
+
 
     private void Awake()
     {
@@ -56,34 +68,59 @@ public class MovingTarget : MonoBehaviour
                 if (hasBeenVisible && isActive)
                 {
                     Escape();
-
                 }
             }
         }
     }
-    public void Init(Vector2 startPoint, Vector2 endPoint, float delay, EnemyTypeData type)
+
+    public void Init(Vector2 startPoint, Vector2 endPoint, EnemyTypeData type)
     {
         StopAllCoroutines();
 
         if (respawnableMovingTargets.Contains(this)) respawnableMovingTargets.Remove(this);
 
+        gameObject.name = type.name;
         creationTime = Time.time;
-        startDelay = delay;
+        startDelay = START_DELAY_DEFAULT;
         hasBeenVisible = false;
 
-        line.gameObject.SetActive(type.indicatorOn);
-        line.SetPositions(new Vector3[2] { startPoint, endPoint });
-
+        //Pass or apply EnemyTypeData values
         movementSpeed = type.movementSpeed;
+        lifeModOnKill = type.lifeModOnKill;
+        lifeModOnEscape = type.lifeModOnEscape;
+        lifeModOnEyeCollision = type.lifeModOnEyeCollision;
+        pointModOnKill = type.pointModOnKill;
+        pointModOnEscape = type.pointModOnEscape;
+        pointModOnEyeCollision = type.pointModOnEyeCollision;
+        canBeKilled = type.canBeKilled;
+        destroyOnEyeCollision = type.destroyOnEyeCollision;
+        collideWithEye = type.collideWithEye;
 
+        if(type.sprite!=null)sr.sprite = type.sprite;
+        color1 = type.color1;
+        color2 = type.color2;
+
+        sr.color = color1;
+
+        //Indicator
+        line.gameObject.SetActive(type.indicatorOn);
+        if(type.indicatorOn)
+        {
+            line.startColor = color1;
+            line.endColor = color1;
+            line.SetPositions(new Vector3[2] { startPoint, endPoint });
+        }
+
+
+        //Position and direction
         transform.position = startPoint;
         direction = (endPoint - startPoint).normalized;
         transform.eulerAngles = new Vector3(0, 0, -Vector2.SignedAngle(direction, Vector2.up));
 
-        StartCoroutine(InitEndSequence());
+        StartCoroutine(InitFinalSequence());
     }
 
-    private IEnumerator InitEndSequence()
+    private IEnumerator InitFinalSequence()
     {
         yield return new WaitForSeconds(startDelay);
 
@@ -97,20 +134,31 @@ public class MovingTarget : MonoBehaviour
     private void Escape()
     {
         DestroySelf();
-        GameManager.instance.SetMoney(GameManager.moneyTotal-scoreSubtractionOnEscape);
-        GameManager.instance.SetLivesCurrent(GameManager.livesCurrent - lifeSubtractionOnEscape);
+        GameManager.instance.SetMoney(GameManager.moneyTotal + pointModOnEscape);
+        GameManager.instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnEscape);
     }
 
     public void Kill()
     {
-        GameManager.instance.SetMoney(GameManager.moneyTotal + scoreAwardOnDestroy);
+        if (!canBeKilled) return;
         DestroySelf();
+        GameManager.instance.SetMoney(GameManager.moneyTotal + pointModOnKill);
+        GameManager.instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnKill);
+    }
+
+    public void Collide()
+    {
+        if (!collideWithEye) return;
+        if (destroyOnEyeCollision) DestroySelf();
+        GameManager.instance.SetMoney(GameManager.moneyTotal + pointModOnEyeCollision);
+        GameManager.instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnEyeCollision);
     }
 
     private void DestroySelf()
     {
         StartCoroutine(DestroySelfSequence());
     }
+
     private IEnumerator DestroySelfSequence()
     {
         isActive = false;
@@ -144,9 +192,21 @@ public class MovingTarget : MonoBehaviour
 
         yield return null;
     }
+
     private void SetParticleTrailEmissionSpeed(float rate)
     {
         var emission = particleTrail.emission;
         emission.rateOverTime = rate;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collideWithEye) return;
+        //Debug.Log($"{gameObject.name} collided with {collision.gameObject.name}");
+        
+        if(collision.collider.CompareTag(EyeCenter.HITBOX_TAG))
+        {
+            Collide();
+        }
     }
 }

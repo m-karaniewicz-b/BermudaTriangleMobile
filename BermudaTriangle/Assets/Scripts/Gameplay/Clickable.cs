@@ -54,11 +54,13 @@ public class Clickable : MonoBehaviour
         return retClickable;
     }
 
+    /*
     private void OnDrawGizmos()
     {
         UnityEditor.Handles.color = Color.gray;
         UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.back, maxClickRadius);
     }
+    */
 
     /*
     public bool IsInDistance(Vector2 pos)

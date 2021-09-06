@@ -10,8 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e7cfcc312af4fe479f9fbb1c5bf824f, type: 3}
-  m_Name: SpaceLvl
+  m_Name: Space
   m_EditorClassIdentifier: 
-  levelName: 
   backgroundMat: {fileID: 2100000, guid: 0dae5e4ad31049047b3da5fda89a2303, type: 2}
   borderMat: {fileID: 2100000, guid: 493c224fbbcdb9c4f812e7176cb1a2e6, type: 2}
+  spawnGroups:
+  - weight: 100
+    minLevelScore: 0
+    maxLevelScore: 100
+    enemyType: {fileID: 11400000, guid: cd6e829f9377b5e43bce0a99d4e43ba6, type: 2}
+    instanceCount: 1
+    globalSpawnCooldown: 3

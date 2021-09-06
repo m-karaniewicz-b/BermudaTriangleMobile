@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
 
     public GameObject PauseMenuParent;
     public GameObject LifeDisplayParent;
+    public GameObject UpgradeMenuParent;
+    public GameObject GameOverMenuParent;
 
     [Header("Colors")]
     public Color fullLifeContainerColor;
@@ -22,12 +24,18 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         GameManager.OnGameSessionStart += UIReset;
+        GameManager.OnGameSessionStart += HideGameOverMenu;
         GameManager.OnMoneyModified += UpdateMoneyDisplay;
-        GameManager.OnLivesIsActiveModified += SetLivesDisplayActive;
+        GameManager.OnLifeSystemIsActiveModified += SetLivesDisplayActive;
         GameManager.OnLivesCurrentModified += UpdateLivesCurrentDisplay;
         GameManager.OnLivesMaxModified += UpdateLivesMaxDisplay;
+        GameManager.OnLevelLost += ShowGameOverMenu;
+        GameManager.OnLevelEnd += ShowUpgradeMenu;
+        GameManager.OnLevelStart += HideUpgradeMenu;
 
         PauseMenuParent.SetActive(false);
+        UpgradeMenuParent.SetActive(false);
+        GameOverMenuParent.SetActive(false);
 
         foreach (Transform entry in LifeDisplayParent.transform)
         {
@@ -48,7 +56,6 @@ public class UIManager : MonoBehaviour
         UpdateLivesCurrentDisplay(0);
         UpdateLivesMaxDisplay(0);
         SetLivesDisplayActive(false);
-
     }
 
     private void UpdateMoneyDisplay(int newScore)
@@ -78,6 +85,26 @@ public class UIManager : MonoBehaviour
         LifeDisplayParent.SetActive(active);
     }
 
+    public void ShowUpgradeMenu()
+    {
+        UpgradeMenuParent.SetActive(true);
+    }
+
+    public void ShowGameOverMenu()
+    {
+        GameOverMenuParent.SetActive(true);
+    }
+
+    public void HideUpgradeMenu()
+    {
+        UpgradeMenuParent.SetActive(false);
+    }
+
+    public void HideGameOverMenu()
+    {
+        GameOverMenuParent.SetActive(false);
+    }
+
     public void UIQuitGame()
     {
 #if (UNITY_EDITOR)
@@ -85,6 +112,5 @@ public class UIManager : MonoBehaviour
 #elif (UNITY_ANDROID)
         Application.Quit();
 #endif
-
     }
 }

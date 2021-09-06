@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Scout
   m_EditorClassIdentifier: 
   movementSpeed: 3
-  targetingEye: 0
   indicatorOn: 1
+  trajectory: 0
   lifeModOnKill: 0
   lifeModOnEscape: -1
   lifeModOnEyeCollision: 0
@@ -22,6 +22,6 @@ MonoBehaviour:
   pointModOnEscape: 0
   pointModOnEyeCollision: 0
   sprite: {fileID: 0}
-  color1: {r: 1, g: 1, b: 1, a: 1}
+  color1: {r: 0, g: 0.946707, b: 1, a: 1}
   color2: {r: 1, g: 1, b: 1, a: 1}
   prefab: {fileID: 0}

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using Sirenix.OdinInspector;
 
 public class LevelManager : MonoBehaviour
@@ -8,15 +9,19 @@ public class LevelManager : MonoBehaviour
     private LevelData currentLevelData;
     private int currentLevelID;
 
+    [Header("References")]
     public SpriteRenderer backgroundSR;
     public SpriteRenderer borderSR;
 
+    [Header("Levels")]
     public LevelData[] levelList;
+
+    public static Action<LevelData> OnLevelLoaded;
 
     private void Awake()
     {
         GameManager.OnGameSessionStart += LoadStartingLevel;
-        GameManager.OnLevelComplete += LoadLevelNext;
+        GameManager.OnLevelStart += LoadLevelNext;
     }
 
     public void ForceSetLevelMaterials(LevelData level)
@@ -42,11 +47,13 @@ public class LevelManager : MonoBehaviour
         currentLevelData = levelList[id];
         currentLevelID = id;
         LoadLevelBackground(currentLevelData);
+
+        OnLevelLoaded?.Invoke(currentLevelData);
     }
 
     public void LoadLevelNext()
     {
-        if (currentLevelID < levelList.Length)
+        if (currentLevelID < levelList.Length-1)
         {
             LoadLevel(currentLevelID + 1);
         }

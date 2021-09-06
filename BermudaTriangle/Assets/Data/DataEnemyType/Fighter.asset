@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d7171a61bcd7f468e05caad544e8c7, type: 3}
   m_Name: Fighter
   m_EditorClassIdentifier: 
-  movementSpeed: 3
-  targetingEye: 1
-  indicatorOn: 0
+  movementSpeed: 6
+  indicatorOn: 1
+  trajectory: 1
+  canBeKilled: 1
   lifeModOnKill: 0
+  pointModOnKill: 2
   lifeModOnEscape: 0
-  lifeModOnEyeCollision: -1
-  pointModOnKill: 0
   pointModOnEscape: 0
+  collideWithEye: 1
+  destroyOnEyeCollision: 1
+  lifeModOnEyeCollision: -1
   pointModOnEyeCollision: 0
   sprite: {fileID: 0}
-  color1: {r: 1, g: 1, b: 1, a: 1}
+  color1: {r: 1, g: 0, b: 0, a: 1}
   color2: {r: 1, g: 1, b: 1, a: 1}
   prefab: {fileID: 0}

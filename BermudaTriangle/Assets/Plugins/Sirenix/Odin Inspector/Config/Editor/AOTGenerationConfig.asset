@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7cfcc312af4fe479f9fbb1c5bf824f, type: 3}
-  m_Name: IslandLvl
+  m_Script: {fileID: 1726182683, guid: a4865f1ab4504ed8a368670db22f409c, type: 3}
+  m_Name: AOTGenerationConfig
   m_EditorClassIdentifier: 
-  levelName: Island
-  backgroundMat: {fileID: 2100000, guid: e29697ca3de426045910458c3b4db2d3, type: 2}
-  borderMat: {fileID: 2100000, guid: a29e645d6a38e4743bb6bcdf337085e5, type: 2}
+  automateBeforeBuilds: 0
+  deleteDllAfterBuilds: 1
+  AutomateForAllAOTPlatforms: 1
+  automateForPlatforms: 0900000014000000
+  lastScan: 0
+  supportSerializedTypes: []

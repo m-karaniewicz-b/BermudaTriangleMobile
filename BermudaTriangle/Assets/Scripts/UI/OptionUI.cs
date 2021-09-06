@@ -23,7 +23,12 @@ public class OptionUI : MonoBehaviour
 
     public void CheckReferences()
     {
-        if (buyButton || iconDisplay || nameDisplay || descriptionDisplay || priceDisplay || soldOverlay == null)
+        if (buyButton == null || 
+            iconDisplay == null || 
+            nameDisplay == null || 
+            descriptionDisplay == null || 
+            priceDisplay == null ||  
+            soldOverlay == null)
             Debug.LogError($"Missing reference in {GetType()} named {gameObject.name}");
     }
 

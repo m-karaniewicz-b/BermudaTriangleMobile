@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d7171a61bcd7f468e05caad544e8c7, type: 3}
   m_Name: VIP
   m_EditorClassIdentifier: 
-  movementSpeed: 6
-  targetingEye: 0
+  movementSpeed: 8
   indicatorOn: 0
+  trajectory: 0
+  canBeKilled: 1
   lifeModOnKill: 0
-  lifeModOnEscape: 0
-  lifeModOnEyeCollision: 0
   pointModOnKill: 3
+  lifeModOnEscape: 0
   pointModOnEscape: 0
+  collideWithEye: 0
+  destroyOnCollision: 0
+  lifeModOnEyeCollision: 0
   pointModOnEyeCollision: 0
   sprite: {fileID: 0}
-  color1: {r: 1, g: 1, b: 1, a: 1}
+  color1: {r: 0.8660095, g: 1, b: 0, a: 1}
   color2: {r: 1, g: 1, b: 1, a: 1}
   prefab: {fileID: 0}

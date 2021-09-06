@@ -7,11 +7,11 @@ public class EyeCenter : Clickable
     private float startingHitRadius = 1;
     internal float hitRadius;
 
+    public const string HITBOX_TAG = "Hitbox";
+
     private List<MovingTarget> targetList = new List<MovingTarget>();
 
-    public LayerMask eyeMask;
-
-    [SerializeField] private CircleCollider2D coll;
+    [SerializeField] private CircleCollider2D attackCollider;
     [SerializeField] private ParticleSystem circlingParticles;
 
     private void Awake()
@@ -44,7 +44,10 @@ public class EyeCenter : Clickable
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        targetList.Add(collision.gameObject.GetComponentInParent<MovingTarget>());
+        if (collision.GetContact(0).otherCollider.CompareTag(HITBOX_TAG)) return;
+
+        MovingTarget tar = collision.gameObject.GetComponentInParent<MovingTarget>();
+        if (tar != null) targetList.Add(tar);
 
         //Debug.Log($"Target acquired: {collision.gameObject.name} Target count: {targetList.Count}");
     }
@@ -60,7 +63,7 @@ public class EyeCenter : Clickable
     public void SetHitRadius(float radius)
     {
         hitRadius = radius;
-        coll.radius = hitRadius;
+        attackCollider.radius = hitRadius;
 
         var shape = circlingParticles.shape;
         shape.radius = hitRadius;

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Draggable : Clickable
+public class Draggable : Holdable
 {
-    public static Clickable heldObject;
-
     private void Update()
     {
         if (heldObject == this)
@@ -20,18 +18,6 @@ public class Draggable : Clickable
                 heldObject.transform.position.z);
 
             transform.position = newPos;
-
-
-
-            /*
-            Vector3 minScreenBounds = Camera.main.ScreenToWorldPoint(Vector2.zero);
-            Vector3 maxScreenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-
-            transform.position = new Vector3(
-                Mathf.Clamp(transform.position.x, minScreenBounds.x, maxScreenBounds.x),
-                Mathf.Clamp(transform.position.y, minScreenBounds.y, maxScreenBounds.y),
-                heldObject.transform.position.z);
-            */
         }
     }
 
@@ -41,7 +27,6 @@ public class Draggable : Clickable
 
         AudioManager.instance.Play("PickUp");
         VFXManager.SpawnParticleOneshot(VFXManager.instance.clickEmptyVFX, transform.position);
-        heldObject = this;
     }
 
     public override void OnEndClick()
@@ -50,7 +35,6 @@ public class Draggable : Clickable
 
         AudioManager.instance.Play("PutDown");
         VFXManager.SpawnParticleOneshot(VFXManager.instance.dropVFX, transform.position);
-        heldObject = null;
     }
 
 }

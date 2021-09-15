@@ -571,7 +571,8 @@ MonoBehaviour:
   nameDisplay: {fileID: 6696993658443035565}
   descriptionDisplay: {fileID: 3634251773670878113}
   priceDisplay: {fileID: 3634251774611341808}
-  soldOverlay: {fileID: 3634251774031971765}
+  soldOverlay: {fileID: 3634251774096058706}
+  availableOverlay: {fileID: 3634251774031971765}
 --- !u!1 &3634251774031971765
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,7 +585,7 @@ GameObject:
   - component: {fileID: 3634251774031971766}
   - component: {fileID: 3634251774031971767}
   m_Layer: 5
-  m_Name: Sold
+  m_Name: Unavailable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -659,7 +660,7 @@ GameObject:
   - component: {fileID: 3634251774096058711}
   - component: {fileID: 3634251774096058708}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: SoldText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,8 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e7cfcc312af4fe479f9fbb1c5bf824f, type: 3}
   m_Name: Island
   m_EditorClassIdentifier: 
-  backgroundMat: {fileID: 2100000, guid: e29697ca3de426045910458c3b4db2d3, type: 2}
-  borderMat: {fileID: 2100000, guid: a29e645d6a38e4743bb6bcdf337085e5, type: 2}
+  levelName: 
+  background:
+    scrollSpeed: {x: 1, y: 1}
+    crossover1to2: 0.5
+    crossover2to3: 0.7
+    color1: {r: 1, g: 1, b: 1, a: 1}
+    color2: {r: 1, g: 1, b: 1, a: 1}
+    color3: {r: 1, g: 1, b: 1, a: 1}
+    baseNoiseScale: 10
+    circleDistortionRadius: 0.7
+    circleDistortionHardiness: 0.8
   spawnGroups:
   - weight: 100
     minLevelScore: 0

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e7cfcc312af4fe479f9fbb1c5bf824f, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  levelName: Test
+  background:
+    scrollSpeed: {x: 1, y: 1}
+    crossover1to2: 0.381
+    crossover2to3: 0.532
+    color1: {r: 1, g: 0.78309107, b: 0, a: 1}
+    color2: {r: 0.9150943, g: 0.41006586, b: 0.9150943, a: 1}
+    color3: {r: 1, g: 0.8254717, b: 0.8254717, a: 1}
+    baseNoiseScale: 10
+    circleDistortionRadius: 0.72
+    circleDistortionHardiness: 0.847
+  spawnGroups:
+  - weight: 100
+    minLevelScore: 0
+    maxLevelScore: 100
+    enemyType: {fileID: 11400000, guid: cd6e829f9377b5e43bce0a99d4e43ba6, type: 2}
+    instanceCount: 1
+    globalSpawnCooldown: 3

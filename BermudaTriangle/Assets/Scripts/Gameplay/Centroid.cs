@@ -5,9 +5,10 @@ using Sirenix.OdinInspector;
 
 public class Centroid : MonoBehaviour
 {
-    public int startingPointCount = 3;
+    public static Centroid instance;
 
-    internal int currentPointCount;
+    private int startingPointCount = 3;
+    private int currentPointCount;
 
     [Header("References")]
     [SerializeField] private GameObject controlPointPrefab;
@@ -18,12 +19,10 @@ public class Centroid : MonoBehaviour
 
     private void Awake()
     {
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
         GameManager.OnGameSessionStart += SessionStart;
-    }
-
-    private void SessionStart()
-    {
-        InitControlPoints(startingPointCount);
+        //GameManager.OnUpgradeMenuEnd += UpgradeEnd;
     }
 
     private void Update()
@@ -43,16 +42,7 @@ public class Centroid : MonoBehaviour
 
     }
 
-    private void UpdateLineRenderer()
-    {
-        lineRend.positionCount = controlPoints.Length;
-        for (int i = 0; i < controlPoints.Length; i++)
-        {
-            lineRend.SetPosition(i, controlPoints[i].transform.position);
-        }
-    }
-
-    private void InitControlPoints(int controlPointCount)
+    public void InitControlPoints(int controlPointCount)
     {
         ClearControlPoints();
 
@@ -66,12 +56,31 @@ public class Centroid : MonoBehaviour
             Vector2 pos = Quaternion.AngleAxis(angle, Vector3.forward) * offset;
 
             controlPoints[i] = Instantiate(controlPointPrefab, pos, Quaternion.identity, transform).transform;
-            controlPoints[i].name = $"Control Point {i+1}";
+            controlPoints[i].name = $"Control Point {i + 1}";
         }
 
         currentPointCount = controlPointCount;
 
         UpdateLineRenderer();
+    }
+
+    private void SessionStart()
+    {
+        InitControlPoints(startingPointCount);
+    }
+
+    public int GetControlPointCount()
+    {
+        return currentPointCount;
+    }
+
+    private void UpdateLineRenderer()
+    {
+        lineRend.positionCount = controlPoints.Length;
+        for (int i = 0; i < controlPoints.Length; i++)
+        {
+            lineRend.SetPosition(i, controlPoints[i].transform.position);
+        }
     }
 
     private void ClearControlPoints()

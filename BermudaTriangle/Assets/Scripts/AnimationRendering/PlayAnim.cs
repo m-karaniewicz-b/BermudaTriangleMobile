@@ -14,8 +14,6 @@ public class PlayAnim : MonoBehaviour
     private void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
-
-        
     }
 
     private void Start()

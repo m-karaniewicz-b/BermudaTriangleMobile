@@ -2,77 +2,131 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EyeCenter : Clickable
+public class EyeCenter : Holdable
 {
-    private float startingHitRadius = 1;
-    internal float hitRadius;
+    public static EyeCenter instance;
 
+    [Header("Settings")]    
+    [SerializeField]private Color explosionRadiusVFXColor = Color.white;
+    [SerializeField]private float explosionRadiusVFXDuration = 1f;
+
+    private float chargeSpeed = 1f; //1 unit of radius per second
+    private float chargeRadiusMaxCurrent = CHARGE_RADIUS_MAX_DEFAULT;
+
+    public const float CHARGE_RADIUS_MAX_DEFAULT = 1.2f;
+    public const float CHARGE_RADIUS_MIN = 0.75f;
+
+    private bool isCharging = false;
+    private float chargeRadiusCurrent;
+
+    public LayerMask enemyTargetLayer;
     public const string HITBOX_TAG = "Hitbox";
 
-    private List<MovingTarget> targetList = new List<MovingTarget>();
-
+    [Header("References")]
+    [SerializeField] private RadiusDisplay ChargeRadiusMaxIndicator;
+    [SerializeField] private SpriteRenderer ChargeRadiusCurrentIndicator;
     [SerializeField] private CircleCollider2D attackCollider;
-    [SerializeField] private ParticleSystem circlingParticles;
 
     private void Awake()
     {
-        SetHitRadius(startingHitRadius);
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+
+        ChargeRadiusCurrentIndicator.enabled = false;
+    }
+
+    private void Start()
+    {
+        SetChargeRadiusMax(chargeRadiusMaxCurrent);
+        ResetCharging();
+    }
+
+    private void Update()
+    {
+        if (isCharging)
+        {
+            if (chargeRadiusCurrent < chargeRadiusMaxCurrent)
+                SetChargeRadiusCurrent(chargeRadiusCurrent + Time.deltaTime * chargeSpeed);
+        }
     }
 
     public override void OnBeginClick()
     {
         base.OnBeginClick();
 
-        targetList.RemoveAll(item => item == null);
-        if (targetList.Count > 0)
+        if (!isCharging)
+        {
+            StartCharging();
+        }
+    }
+
+    public override void OnEndClick()
+    {
+        base.OnEndClick();
+        if (isCharging)
+        {
+            TryAttack(chargeRadiusCurrent);
+
+            ResetCharging();
+        }
+    }
+
+    private void ResetCharging()
+    {
+        isCharging = false;
+        chargeRadiusCurrent = CHARGE_RADIUS_MIN;
+        ChargeRadiusCurrentIndicator.enabled = false;
+    }
+
+    private void StartCharging()
+    {
+        isCharging = true;
+        ChargeRadiusCurrentIndicator.enabled = true;
+    }
+
+    private void TryAttack(float radius)
+    {
+        List<Collider2D> targets = new List<Collider2D>(
+            Physics2D.OverlapCircleAll(transform.position, radius, enemyTargetLayer));
+
+        if (targets.Count > 0)
         {
             AudioManager.instance.Play("Hit");
-            VFXManager.SpawnParticleExplosionOneShot(VFXManager.instance.hitVFX, transform.position, hitRadius);
+            VFXManager.SpawnParticleExplosionOneShot(VFXManager.instance.hitVFX,
+                transform.position, radius, radius, radius, explosionRadiusVFXColor, Color.white);
+            VFXManager.instance.SpawnSpriteOneShot(VFXManager.instance.spriteRadialGradientReverse,
+                transform.position, radius * 2, explosionRadiusVFXColor, explosionRadiusVFXDuration);
 
-            for (int i = 0; i < targetList.Count; i++)
+            for (int i = 0; i < targets.Count; i++)
             {
-                targetList[i].Kill();
+                MovingTarget t = targets[i].GetComponentInParent<MovingTarget>();
+                if (t != null) t.Kill();
             }
         }
         else
         {
             AudioManager.instance.Play("Miss");
-            VFXManager.SpawnParticleExplosionOneShot(VFXManager.instance.missVFX, transform.position, hitRadius);
-
+            VFXManager.SpawnParticleExplosionOneShot(VFXManager.instance.missVFX, transform.position, radius);
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void SetChargeRadiusMax(float newRadius)
     {
-        if (collision.GetContact(0).otherCollider.CompareTag(HITBOX_TAG)) return;
-
-        MovingTarget tar = collision.gameObject.GetComponentInParent<MovingTarget>();
-        if (tar != null) targetList.Add(tar);
-
-        //Debug.Log($"Target acquired: {collision.gameObject.name} Target count: {targetList.Count}");
+        chargeRadiusMaxCurrent = newRadius;
+        ChargeRadiusMaxIndicator.SetRadius(newRadius);
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    public void SetChargeSpeed(float speed)
     {
-        MovingTarget tar = collision.gameObject.GetComponentInParent<MovingTarget>();
-        targetList.RemoveAll(item => item == tar);
-
-        //Debug.Log($"Target lost: {collision.gameObject.name} Target count: {targetList.Count}");
+        chargeSpeed = speed;
     }
 
-    public void SetHitRadius(float radius)
+    private void SetChargeRadiusCurrent(float newRadius)
     {
-        hitRadius = radius;
-        attackCollider.radius = hitRadius;
+        chargeRadiusCurrent = newRadius;
+        ChargeRadiusCurrentIndicator.transform.localScale =
+            new Vector3(chargeRadiusCurrent * 2, chargeRadiusCurrent * 2, 0);
 
-        var shape = circlingParticles.shape;
-        shape.radius = hitRadius;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = new Color(1, 0, 0, 0.1f);
-
-        Gizmos.DrawSphere(transform.position, hitRadius);
-    }
 }

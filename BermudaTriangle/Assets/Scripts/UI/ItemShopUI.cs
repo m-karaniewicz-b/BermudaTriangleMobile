@@ -4,61 +4,47 @@ using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
+
 public class ItemShopUI : MonoBehaviour
 {
-
     public OptionUI[] optionDiplays;
-
-    public static event Action<ItemData> ItemAcquired;
-
-    private ItemData[] buyableItems;
 
     private void Awake()
     {
-        OptionUI.OptionSelected += OptionSelected;
+        OptionUI.OnOptionSelected += SelectOption;
     }
 
-    public void PopulateShop(ItemData[] items)
-    {
-        buyableItems = items;
-
-        EmptyShop();
-
-        for (int i = 0; i < items.Length; i++)
-        {
-            optionDiplays[i].gameObject.SetActive(true);
-            optionDiplays[i].SetData(i,items[i].name,items[i].description,items[i].price);
-        }
-    }
-
-    public void EmptyShop()
+    public void UpdateShopUI(List<ItemData> items)
     {
         for (int i = 0; i < optionDiplays.Length; i++)
         {
             optionDiplays[i].gameObject.SetActive(false);
         }
-    }
 
-    public void OptionSelected(int optionIndex)
-    {
-        ItemAcquired?.Invoke(buyableItems[optionIndex]);
-    }
-
-    [Button(ButtonSizes.Medium), GUIColor(0.6f, 0.6f, 1)]
-    private void GenerateTestItems()
-    {
-        int itemCount = UnityEngine.Random.Range(1, 9);
-
-        ItemData[] testItems = new ItemData[itemCount];
-
-        for (int i = 0; i < itemCount; i++)
+        for (int i = 0; i < items.Count; i++)
         {
-            testItems[i] = new ItemData();
+            optionDiplays[i].gameObject.SetActive(true);
+            optionDiplays[i].SetData(i, items[i].name, items[i].description, items[i].costMoney, items[i].icon);
         }
 
-        PopulateShop(testItems);
+        UpdateItemAvailability();
     }
 
-    
+    public void UpdateItemAvailability()
+    {
+        bool[] values = ItemManager.instance.GetItemAvailabilities(); 
+
+        for (int i = 0; i < values.Length; i++)
+        {
+            optionDiplays[i].SetAvailability(values[i]);
+        }
+    }
+
+    private void SelectOption(int optionIndex)
+    {
+        ItemManager.instance.GrantItem(ItemManager.instance.GetItemFromBuyableListIndex(optionIndex));
+        UpdateItemAvailability();
+    }
+
 }
 

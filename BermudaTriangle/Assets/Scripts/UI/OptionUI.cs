@@ -13,8 +13,11 @@ public class OptionUI : MonoBehaviour
     public TextMeshProUGUI descriptionDisplay;
     public TextMeshProUGUI priceDisplay;
     public GameObject soldOverlay;
+    public GameObject availableOverlay;
 
-    public static event Action<int> OptionSelected;
+    public static event Action<int> OnOptionSelected;
+
+    public bool isSold = false;
 
     private void Awake()
     {
@@ -23,32 +26,47 @@ public class OptionUI : MonoBehaviour
 
     public void CheckReferences()
     {
-        if (buyButton == null || 
-            iconDisplay == null || 
-            nameDisplay == null || 
-            descriptionDisplay == null || 
-            priceDisplay == null ||  
-            soldOverlay == null)
+        if (buyButton == null ||
+            iconDisplay == null ||
+            nameDisplay == null ||
+            descriptionDisplay == null ||
+            priceDisplay == null ||
+            soldOverlay == null ||
+            availableOverlay == null)
             Debug.LogError($"Missing reference in {GetType()} named {gameObject.name}");
     }
 
-    public void SetData(int index, string name, string description, int price)
+    public void SetData(int index, string itemName, string itemDesc, int itemPrice, Sprite itemIcon)
     {
+        SetSold(false);
         indexInShop = index;
-        nameDisplay.text = name;
-        descriptionDisplay.text = description;
-        priceDisplay.text = price.ToString();
+
+        nameDisplay.text = itemName;
+        descriptionDisplay.text = itemDesc;
+        priceDisplay.text = itemPrice.ToString();
+
+        if (itemIcon != null) iconDisplay.sprite = itemIcon;
     }
 
     public void Select()
     {
-        SetSelectedOverlayActive(true);
-        OptionSelected?.Invoke(indexInShop);
+        SetSold(true);
+        OnOptionSelected?.Invoke(indexInShop);
     }
 
-    private void SetSelectedOverlayActive(bool sold)
+    public void SetSold(bool sold)
     {
+        SetAvailability(!sold);
+        isSold = sold;
         soldOverlay.SetActive(sold);
-        buyButton.enabled = !sold;
+    }
+
+    public void SetAvailability(bool isAvailable)
+    {
+        if (!isSold)
+        {
+            availableOverlay.SetActive(!isAvailable);
+            buyButton.enabled = isAvailable;
+        }
     }
 }

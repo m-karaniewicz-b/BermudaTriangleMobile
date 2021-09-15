@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -326,7 +326,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1653980991}
-  - component: {fileID: 1653980992}
   - component: {fileID: 1653980993}
   m_Layer: 0
   m_Name: RecordManager
@@ -349,23 +348,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1653980992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1653980990}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f4014a76c876634786b2192133e7800, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animationName: Transition
-  folder: TransitionRender
-  frameRate: 30
-  framesToCapture: 240
-  pixelsToWorldUnit: 74.48276
 --- !u!114 &1653980993
 MonoBehaviour:
   m_ObjectHideFlags: 0

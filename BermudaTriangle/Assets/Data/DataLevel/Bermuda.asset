@@ -12,8 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e7cfcc312af4fe479f9fbb1c5bf824f, type: 3}
   m_Name: Bermuda
   m_EditorClassIdentifier: 
-  backgroundMat: {fileID: 2100000, guid: e6aec396561b2c04aa11200bbba8203b, type: 2}
-  borderMat: {fileID: 2100000, guid: d414b3f3a8cb3ac4c8bea94b64564eff, type: 2}
+  levelName: Bermuda
+  background:
+    scrollSpeed: {x: 1, y: 1}
+    crossover1to2: 0.5
+    crossover2to3: 0.7
+    color1: {r: 1, g: 1, b: 1, a: 1}
+    color2: {r: 1, g: 1, b: 1, a: 1}
+    color3: {r: 1, g: 1, b: 1, a: 1}
+    baseNoiseScale: 10
+    circleDistortionRadius: 0.7
+    circleDistortionHardiness: 0.8
   spawnGroups:
   - weight: 75
     minLevelScore: 0

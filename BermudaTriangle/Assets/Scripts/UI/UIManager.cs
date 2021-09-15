@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-
     [Header("References")]
     public TextMeshProUGUI moneyText;
+    public TextMeshProUGUI upgradeMenuMoneyText;
 
     public GameObject PauseMenuParent;
     public GameObject LifeDisplayParent;
@@ -28,10 +28,10 @@ public class UIManager : MonoBehaviour
         GameManager.OnMoneyModified += UpdateMoneyDisplay;
         GameManager.OnLifeSystemIsActiveModified += SetLivesDisplayActive;
         GameManager.OnLivesCurrentModified += UpdateLivesCurrentDisplay;
-        GameManager.OnLivesMaxModified += UpdateLivesMaxDisplay;
-        GameManager.OnLevelLost += ShowGameOverMenu;
-        GameManager.OnLevelEnd += ShowUpgradeMenu;
-        GameManager.OnLevelStart += HideUpgradeMenu;
+        GameManager.OnLifeContainersModified += UpdateLivesMaxDisplay;
+        GameManager.OnLevelEndLost += ShowGameOverMenu;
+        GameManager.OnUpgradeMenuStart += ShowUpgradeMenu;
+        GameManager.OnUpgradeMenuEnd += HideUpgradeMenu;
 
         PauseMenuParent.SetActive(false);
         UpgradeMenuParent.SetActive(false);
@@ -58,10 +58,10 @@ public class UIManager : MonoBehaviour
         SetLivesDisplayActive(false);
     }
 
-    private void UpdateMoneyDisplay(int newScore)
+    private void UpdateMoneyDisplay(int newValue)
     {
-        moneyText.text = newScore.ToString();
-        //hiScoreText.text = hiScore.ToString();
+        moneyText.text = newValue.ToString();
+        upgradeMenuMoneyText.text = newValue.ToString();
     }
 
     private void UpdateLivesCurrentDisplay(int newCount)

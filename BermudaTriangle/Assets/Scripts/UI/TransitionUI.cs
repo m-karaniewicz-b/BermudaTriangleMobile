@@ -15,8 +15,8 @@ public class TransitionUI : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         //sr.enabled = false;
 
-        GameManager.OnExitMenu += InitTransition;
-        GameManager.OnLevelComplete += InitTransition;
+        GameManager.OnUpgradeMenuTransitionOut += InitTransition;
+        GameManager.OnLevelEndComplete += InitTransition;
     }
 
     public void InitTransition()

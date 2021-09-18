@@ -3,25 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-[CreateAssetMenu(fileName ="New level",menuName = "Data/LevelData")]
+[CreateAssetMenu(fileName = "New level", menuName = "Data/LevelData")]
 public class LevelData : ScriptableObject
 {
+    [Space(15f)]
+    [InlineButton("SetNameFromFile", "Set from file")]
     public string levelName;
 
-    [Header("Background")]
+    [TabGroup("Main Tabs","Background Tab")]
+    [HideLabel]
     public BackgroundData background = new BackgroundData();
-    private bool sceneAutoPreview = false;
 
-    [Header("Enemy Spawn Groups")]
+    [FoldoutGroup("Main Tabs/Background Tab/Preview Settings")]
+    [SerializeField] private bool BackgroundAutoPreview = true;
+
+    [TabGroup("Main Tabs","Enemy Spawns")]
     public List<SpawnGroup> spawnGroups;
 
-    //[Button(ButtonSizes.Large), GUIColor(0.7f, 0.7f, 1)]
+
+#if UNITY_EDITOR
+
+    //[HideIf("BackgroundAutoPreview")]
+    [FoldoutGroup("Main Tabs/Background Tab/Preview Settings")]
+    [Button(ButtonSizes.Large), GUIColor(0.7f, 0.7f, 1)]
     private void PreviewBackgroundInScene()
     {
-        FindObjectOfType<LevelManager>().LoadLevelBackground(this,false);
+        LevelManager.Instance.LoadLevelBackground(this, false);
     }
 
-    [Button(ButtonSizes.Large), GUIColor(0.7f, 0.7f, 1)]
     private void SetNameFromFile()
     {
         levelName = name;
@@ -29,11 +38,10 @@ public class LevelData : ScriptableObject
 
     private void OnValidate()
     {
-        if(sceneAutoPreview)
+        if (BackgroundAutoPreview && Time.realtimeSinceStartup > 3f)
         {
             PreviewBackgroundInScene();
         }
     }
-
-
+#endif
 }

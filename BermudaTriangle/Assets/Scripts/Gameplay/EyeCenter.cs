@@ -91,10 +91,10 @@ public class EyeCenter : Holdable
 
         if (targets.Count > 0)
         {
-            AudioManager.instance.Play("Hit");
-            VFXManager.SpawnParticleExplosionOneShot(VFXManager.instance.hitVFX,
+            AudioManager.Instance.Play("Hit");
+            VFXManager.SpawnParticleExplosionOneShot(VFXManager.Instance.hitVFX,
                 transform.position, radius, radius, radius, explosionRadiusVFXColor, Color.white);
-            VFXManager.instance.SpawnSpriteOneShot(VFXManager.instance.spriteRadialGradientReverse,
+            VFXManager.Instance.SpawnSpriteOneShot(VFXManager.Instance.spriteRadialGradientReverse,
                 transform.position, radius * 2, explosionRadiusVFXColor, explosionRadiusVFXDuration);
 
             for (int i = 0; i < targets.Count; i++)
@@ -105,8 +105,8 @@ public class EyeCenter : Holdable
         }
         else
         {
-            AudioManager.instance.Play("Miss");
-            VFXManager.SpawnParticleExplosionOneShot(VFXManager.instance.missVFX, transform.position, radius);
+            AudioManager.Instance.Play("Miss");
+            VFXManager.SpawnParticleExplosionOneShot(VFXManager.Instance.missVFX, transform.position, radius);
         }
     }
 

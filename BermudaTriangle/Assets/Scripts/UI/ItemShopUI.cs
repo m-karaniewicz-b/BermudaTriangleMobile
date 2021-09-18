@@ -32,7 +32,7 @@ public class ItemShopUI : MonoBehaviour
 
     public void UpdateItemAvailability()
     {
-        bool[] values = ItemManager.instance.GetItemAvailabilities(); 
+        bool[] values = ItemManager.Instance.GetItemAvailabilities(); 
 
         for (int i = 0; i < values.Length; i++)
         {
@@ -42,7 +42,7 @@ public class ItemShopUI : MonoBehaviour
 
     private void SelectOption(int optionIndex)
     {
-        ItemManager.instance.GrantItem(ItemManager.instance.GetItemFromBuyableListIndex(optionIndex));
+        ItemManager.Instance.GrantItem(ItemManager.Instance.GetItemFromBuyableListIndex(optionIndex));
         UpdateItemAvailability();
     }
 

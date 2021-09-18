@@ -2,25 +2,8 @@
 using UnityEngine;
 using System;
 
-[Serializable]
-public class Sound
+public class AudioManager : Singleton<AudioManager>
 {
-    public string name;
-    public AudioClip clip;
-
-    [Range(0, 1)]
-    public float sfxVolume = 1;
-
-    public bool isMusic = false;
-
-    [HideInInspector]
-    public float lastStartTime;
-}
-
-public class AudioManager : MonoBehaviour
-{
-    public static AudioManager instance;
-
     public float globalSFXCooldown = 0.15f;
 
     private AudioSource musicSource;
@@ -30,17 +13,6 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            DontDestroyOnLoad(gameObject);
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         musicSource = new GameObject().AddComponent<AudioSource>();
         musicSource.transform.parent = transform;
         musicSource.volume = 0.5f;

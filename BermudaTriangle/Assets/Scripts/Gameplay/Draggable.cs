@@ -25,16 +25,16 @@ public class Draggable : Holdable
     {
         base.OnBeginClick();
 
-        AudioManager.instance.Play("PickUp");
-        VFXManager.SpawnParticleOneshot(VFXManager.instance.clickEmptyVFX, transform.position);
+        AudioManager.Instance.Play("PickUp");
+        VFXManager.SpawnParticleOneshot(VFXManager.Instance.clickEmptyVFX, transform.position);
     }
 
     public override void OnEndClick()
     {
         base.OnEndClick();
 
-        AudioManager.instance.Play("PutDown");
-        VFXManager.SpawnParticleOneshot(VFXManager.instance.dropVFX, transform.position);
+        AudioManager.Instance.Play("PutDown");
+        VFXManager.SpawnParticleOneshot(VFXManager.Instance.dropVFX, transform.position);
     }
 
 }

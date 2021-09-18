@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemManager : MonoBehaviour
+public class ItemManager : Singleton<ItemManager>
 {
-    public static ItemManager instance;
-
     public const int MAXIMUM_SHOP_SIZE = 8;
 
     public List<PremadeItemData> premadeItemObjects = new List<PremadeItemData>();
@@ -17,8 +15,6 @@ public class ItemManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
         GameManager.OnUpgradeMenuStart += PopulateUpgradeShop;
     }
 
@@ -26,14 +22,14 @@ public class ItemManager : MonoBehaviour
     {
         PayItemCosts(item);
         ownedItems.Add(item);
-        UpgradeManager.instance.ApplyItem(item);
+        UpgradeManager.Instance.ApplyItem(item);
     }
 
     private void PayItemCosts(ItemData item)
     {
-        GameManager.instance.SetMoney(GameManager.moneyTotal - item.costMoney);
-        GameManager.instance.SetLivesCurrent(GameManager.livesCurrent - item.costLivesCurrent);
-        GameManager.instance.SetLifeContainers(GameManager.lifeContainers - item.costLifeContainers);
+        GameManager.Instance.SetMoney(GameManager.moneyTotal - item.costMoney);
+        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent - item.costLivesCurrent);
+        GameManager.Instance.SetLifeContainers(GameManager.lifeContainers - item.costLifeContainers);
     }
 
     private void PopulateUpgradeShop()

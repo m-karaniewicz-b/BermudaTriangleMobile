@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityManager : MonoBehaviour
+public class EntityManager : Singleton<EntityManager>
 {
     private Rect playArea;
 

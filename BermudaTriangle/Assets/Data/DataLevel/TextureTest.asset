@@ -10,19 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e7cfcc312af4fe479f9fbb1c5bf824f, type: 3}
-  m_Name: Test
+  m_Name: TextureTest
   m_EditorClassIdentifier: 
-  levelName: Test
+  levelName: TextureTest
   background:
-    scrollSpeed: {x: 1, y: 1}
-    crossover1to2: 0.381
-    crossover2to3: 0.532
-    color1: {r: 1, g: 0.78309107, b: 0, a: 1}
-    color2: {r: 0.9150943, g: 0.41006586, b: 0.9150943, a: 1}
-    color3: {r: 1, g: 0.8254717, b: 0.8254717, a: 1}
-    baseNoiseScale: 10
-    circleDistortionRadius: 0.72
-    circleDistortionHardiness: 0.847
+    color1: {r: 0.37126204, g: 0.66214526, b: 0.764151, a: 1}
+    color2: {r: 0.3529412, g: 0.48228928, b: 0.5058824, a: 1}
+    color3: {r: 1, g: 0.4481132, b: 0.4481132, a: 1}
+    crossover: {x: 0.58825314, y: 0.7517409}
+    circleDistortionRadius: 0.493
+    circleDistortionHardiness: 0.79
+    baseNoiseScale: 1.11
+    baseNoiseScrollSpeed: {x: -0.5, y: -0.5}
+    overlayTextureStrength: 0
+    overlayTexture: {fileID: 2800000, guid: e31debc8f526893478ba8f07dde66cb9, type: 3}
+  BackgroundAutoPreview: 1
   spawnGroups:
   - weight: 100
     minLevelScore: 0

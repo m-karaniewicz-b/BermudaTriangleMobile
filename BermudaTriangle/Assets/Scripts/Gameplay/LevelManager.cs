@@ -4,13 +4,12 @@ using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
     private LevelData currentLevelData;
     private int currentLevelID;
 
     [Header("References")]
-    public BackgroundController backgroundController;
 
     [Header("Levels")]
     public LevelData[] levelList;
@@ -25,7 +24,7 @@ public class LevelManager : MonoBehaviour
 
     public void LoadLevelBackground(LevelData data, bool backgroundTransition = true)
     {
-        backgroundController.ChangeBackground(data.background, backgroundTransition);
+        BackgroundController.Instance.ChangeBackground(data.background, backgroundTransition);
     }
 
     private void LoadStartingLevel()

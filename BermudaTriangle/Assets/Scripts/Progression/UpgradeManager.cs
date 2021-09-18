@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public class UpgradeManager : MonoBehaviour
+public class UpgradeManager : Singleton<UpgradeManager>
 {
-    public static UpgradeManager instance;
-
     [Header("Current Upgrade Stats")]
     private int lifeContainers = 3;
     private int controlPoints = 3;
@@ -22,8 +20,7 @@ public class UpgradeManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
+
     }
 
     public void ApplyItem(ItemData item, bool unapply = false)
@@ -49,13 +46,13 @@ public class UpgradeManager : MonoBehaviour
 
     private void ApplyOneTimeEffects(ItemData item)
     {
-        GameManager.instance.SetLivesCurrent(GameManager.livesCurrent + item.lifeRestore);
-        GameManager.instance.SetMoney(GameManager.moneyTotal + item.money);
+        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent + item.lifeRestore);
+        GameManager.Instance.SetMoney(GameManager.moneyTotal + item.money);
     }
 
     private void UpdateUpgrades()
     {
-        GameManager.instance.SetLifeContainers(lifeContainers);
+        GameManager.Instance.SetLifeContainers(lifeContainers);
 
         if (Centroid.instance.GetControlPointCount() != controlPoints) 
             Centroid.instance.InitControlPoints(controlPoints);

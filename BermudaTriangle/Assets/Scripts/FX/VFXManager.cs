@@ -2,19 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VFXManager : MonoBehaviour
+public class VFXManager : Singleton<VFXManager>
 {
-    public static VFXManager instance;
-
     private static Transform particleParent;
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
         particleParent = new GameObject().transform;
         particleParent.name = "ParticleParent";
     }

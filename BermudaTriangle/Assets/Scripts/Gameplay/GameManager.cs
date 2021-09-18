@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public static GameManager instance;
-
     private const int LIFE_CONTAINER_MAXIMUM = 8;
-    private const int LEVEL_COMPLETE_THRESHOLD = 3;
+    private const int LEVEL_COMPLETE_THRESHOLD = 1;
 
     public static int livesCurrent;
     public static int lifeContainers;
@@ -42,13 +40,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else Destroy(gameObject);
 
-        //QualitySettings.vSyncCount = 0;
+        QualitySettings.vSyncCount = 0;
         //Application.targetFrameRate = 30;
 
         CalculatePlayArea();
@@ -57,7 +50,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        AudioManager.instance.Play("Chain1");
+        AudioManager.Instance.Play("Chain1");
 
         GameSessionInit();
 

@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BackgroundController : MonoBehaviour
+public class BackgroundController : Singleton<BackgroundController>
 {
     [SerializeField] private SpriteRenderer targetSR;
 
-    private Vector2 scrollSpeed;
-    private Vector2 scrollCounter;
-
     private BackgroundData currentBG;
+
+    private Vector2 baseNoiseScrollCounter = Vector2.zero;
+    private Vector2 baseNoiseScrollSpeed;
 
     private void Update()
     {
-        MoveScrollPosition();
+        UpdateTimeControlledParameters();
     }
 
     public void ChangeBackground(BackgroundData targetBackground, bool transition)
@@ -21,21 +21,44 @@ public class BackgroundController : MonoBehaviour
         if (transition)
         {
             StopAllCoroutines();
-            StartCoroutine(BackgroundTransitionSequence(targetBackground, 2));
+            StartCoroutine(BackgroundTransitionSequence(targetBackground));
         }
         else
         {
+            ApplyBackgroundData(targetBackground, false);
             currentBG = targetBackground;
-            ApplyBackgroundData(targetBackground);
         }
     }
 
-    private IEnumerator BackgroundTransitionSequence(BackgroundData targetBG, float duration)
+    private IEnumerator BackgroundTransitionSequence(BackgroundData targetBG)
     {
+        float duration = 3f;
+
+        const float midpoint = 0.33f;
+
+        bool textureSet = false;
+
         float timer = 0;
         while (timer < duration)
         {
-            ApplyBackgroundData(BackgroundData.Lerp(currentBG, targetBG, timer / duration));
+            float progress = Mathf.SmoothStep(0, 1, timer / duration);
+
+            ApplyBackgroundData(BackgroundData.Lerp(currentBG, targetBG, progress));
+
+            if (progress >= midpoint && textureSet == false)
+            {
+                textureSet = true;
+                ApplyBackgroundTexture(targetBG.overlayTexture);
+            }
+
+            float textureStrength;
+            if (timer < midpoint * duration) 
+                textureStrength = Mathf.SmoothStep(currentBG.overlayTextureStrength, 0, timer / (duration * midpoint));
+            else 
+                textureStrength = Mathf.SmoothStep(0, targetBG.overlayTextureStrength, (timer - duration * midpoint) / (duration * (1 - midpoint)));
+
+            ApplyBackgroundTextureStrength(textureStrength);
+
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
@@ -46,48 +69,68 @@ public class BackgroundController : MonoBehaviour
         yield return null;
     }
 
-    private void MoveScrollPosition()
+    private void UpdateTimeControlledParameters()
     {
-        scrollCounter.x += Time.deltaTime * scrollSpeed.x;
-        scrollCounter.y += Time.deltaTime * scrollSpeed.y;
-        targetSR.material.SetVector("_ScrollPosition", scrollCounter);
+        baseNoiseScrollCounter.x += Time.deltaTime * baseNoiseScrollSpeed.x;
+        baseNoiseScrollCounter.y += Time.deltaTime * baseNoiseScrollSpeed.y;
+
+        targetSR.material.SetVector("_BaseNoiseScrollOffsetInput", baseNoiseScrollCounter);
     }
 
-    private void MoveScrollPositionEditor()
+    private void ApplyBackgroundTexture(Texture2D tex)
     {
-        scrollCounter.x += Time.deltaTime * scrollSpeed.x;
-        scrollCounter.y += Time.deltaTime * scrollSpeed.y;
-        targetSR.sharedMaterial.SetVector("_ScrollPosition", scrollCounter);
+        targetSR.material.SetTexture("_OverlayTexture", tex);
     }
 
-    private void ApplyBackgroundData(BackgroundData data)
+    private void ApplyBackgroundTextureStrength(float strength)
     {
-        scrollSpeed = data.scrollSpeed;
+        targetSR.material.SetFloat("_OverlayTextureStrength", strength);
+    }
 
-        if(Application.isPlaying)
+    private void ApplyBackgroundData(BackgroundData data, bool transition = true)
+    {
+        baseNoiseScrollSpeed = data.baseNoiseScrollSpeed;
+
+        if (Application.isPlaying)
         {
-            targetSR.material.SetFloat("_Crossover1to2", data.crossover1to2);
-            targetSR.material.SetFloat("_Crossover2to3", data.crossover2to3);
             targetSR.material.SetColor("_Color1", data.color1);
             targetSR.material.SetColor("_Color2", data.color2);
             targetSR.material.SetColor("_Color3", data.color3);
+            targetSR.material.SetFloat("_Crossover1to2", data.crossover.x);
+            targetSR.material.SetFloat("_Crossover2to3", data.crossover.y);
             targetSR.material.SetFloat("_BaseNoiseScale", data.baseNoiseScale);
             targetSR.material.SetFloat("_CircleDistortionRadius", data.circleDistortionRadius);
             targetSR.material.SetFloat("_CircleDistortionHardiness", data.circleDistortionHardiness);
+
+            if (!transition)
+            {
+                targetSR.sharedMaterial.SetFloat("_OverlayTextureStrength", data.overlayTextureStrength);
+                targetSR.sharedMaterial.SetTexture("_OverlayTexture", data.overlayTexture);
+            }
+
         }
         else
         {
-            targetSR.sharedMaterial.SetFloat("_Crossover1to2", data.crossover1to2);
-            targetSR.sharedMaterial.SetFloat("_Crossover2to3", data.crossover2to3);
             targetSR.sharedMaterial.SetColor("_Color1", data.color1);
             targetSR.sharedMaterial.SetColor("_Color2", data.color2);
             targetSR.sharedMaterial.SetColor("_Color3", data.color3);
+            targetSR.sharedMaterial.SetFloat("_Crossover1to2", data.crossover.x);
+            targetSR.sharedMaterial.SetFloat("_Crossover2to3", data.crossover.y);
             targetSR.sharedMaterial.SetFloat("_BaseNoiseScale", data.baseNoiseScale);
             targetSR.sharedMaterial.SetFloat("_CircleDistortionRadius", data.circleDistortionRadius);
             targetSR.sharedMaterial.SetFloat("_CircleDistortionHardiness", data.circleDistortionHardiness);
+
+            targetSR.sharedMaterial.SetFloat("_OverlayTextureStrength", data.overlayTextureStrength);
+            targetSR.sharedMaterial.SetTexture("_OverlayTexture", data.overlayTexture);
         }
 
     }
+
+    public static float SigmoidLogistic(float value, float max, float curve)
+    {
+        return max / (1 + Mathf.Pow(Mathf.Epsilon, -curve * (value)));
+    }
+
 
 }
 

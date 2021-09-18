@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>
 {
     private void Update()
     {
@@ -47,8 +47,8 @@ public class InputManager : MonoBehaviour
 
         if (cl == null)
         {
-            AudioManager.instance.Play("ClickEmpty");
-            VFXManager.SpawnParticleOneshot(VFXManager.instance.clickEmptyVFX, clickPosition);
+            AudioManager.Instance.Play("ClickEmpty");
+            VFXManager.SpawnParticleOneshot(VFXManager.Instance.clickEmptyVFX, clickPosition);
             return;
         }
 

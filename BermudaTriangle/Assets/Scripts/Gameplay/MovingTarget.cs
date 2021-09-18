@@ -134,24 +134,24 @@ public class MovingTarget : MonoBehaviour
     private void Escape()
     {
         DestroySelf();
-        GameManager.instance.SetMoney(GameManager.moneyTotal + pointModOnEscape);
-        GameManager.instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnEscape);
+        GameManager.Instance.SetMoney(GameManager.moneyTotal + pointModOnEscape);
+        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnEscape);
     }
 
     public void Kill()
     {
         if (!canBeKilled) return;
         DestroySelf();
-        GameManager.instance.SetMoney(GameManager.moneyTotal + pointModOnKill);
-        GameManager.instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnKill);
+        GameManager.Instance.SetMoney(GameManager.moneyTotal + pointModOnKill);
+        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnKill);
     }
 
     public void Collide()
     {
         if (!collideWithEye) return;
         if (destroyOnEyeCollision) DestroySelf();
-        GameManager.instance.SetMoney(GameManager.moneyTotal + pointModOnEyeCollision);
-        GameManager.instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnEyeCollision);
+        GameManager.Instance.SetMoney(GameManager.moneyTotal + pointModOnEyeCollision);
+        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnEyeCollision);
     }
 
     private void DestroySelf()

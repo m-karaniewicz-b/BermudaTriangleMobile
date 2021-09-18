@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e7cfcc312af4fe479f9fbb1c5bf824f, type: 3}
-  m_Name: Test 1
+  m_Name: Test 2
   m_EditorClassIdentifier: 
-  levelName: Test 1
+  levelName: Test 2
   background:
-    color1: {r: 0.8666667, g: 0.30588233, b: 0.50273037, a: 1}
-    color2: {r: 0.504, g: 0.35380802, b: 0.35380802, a: 1}
-    color3: {r: 0.745283, g: 0.56566983, b: 0.61158556, a: 1}
-    crossover: {x: 0.21283686, y: 0.2976083}
-    circleDistortionRadius: 0.478
-    circleDistortionHardiness: 1.39
-    baseNoiseScale: 32.78
+    color1: {r: 0.30588233, g: 0.7769322, b: 0.8666667, a: 1}
+    color2: {r: 0.3529412, g: 0.48228928, b: 0.5058824, a: 1}
+    color3: {r: 0.5647059, g: 0.74509805, b: 0.6686895, a: 1}
+    crossover: {x: 0.5, y: 0.7}
+    circleDistortionRadius: 0.683
+    circleDistortionHardiness: 0.5
+    baseNoiseScale: 9.5
     baseNoiseScrollSpeed: {x: 1, y: 1}
-    overlayTextureStrength: -0.5
-    overlayTexture: {fileID: 2800000, guid: 7f1ee5cf274c8024b948782cd98e2766, type: 3}
+    overlayTextureStrength: 0
+    overlayTexture: {fileID: 0}
   BackgroundAutoPreview: 1
   spawnGroups:
   - weight: 100

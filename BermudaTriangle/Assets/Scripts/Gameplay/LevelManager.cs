@@ -9,8 +9,6 @@ public class LevelManager : Singleton<LevelManager>
     private LevelData currentLevelData;
     private int currentLevelID;
 
-    [Header("References")]
-
     [Header("Levels")]
     public LevelData[] levelList;
 
@@ -18,8 +16,8 @@ public class LevelManager : Singleton<LevelManager>
 
     private void Awake()
     {
-        GameManager.OnGameSessionStart += LoadStartingLevel;
-        GameManager.OnUpgradeMenuEnd += LoadLevelNext;
+        GameManager.Instance.OnGameSessionStart += LoadStartingLevel;
+        GameManager.Instance.OnUpgradeMenuEnd += LoadLevelNext;
     }
 
     public void LoadLevelBackground(LevelData data, bool backgroundTransition = true)

@@ -8,44 +8,42 @@ public class GameManager : Singleton<GameManager>
     private const int LIFE_CONTAINER_MAXIMUM = 8;
     private const int LEVEL_COMPLETE_THRESHOLD = 1;
 
-    public static int livesCurrent;
-    public static int lifeContainers;
+    public int livesCurrent;
+    public int lifeContainers;
     private bool lifeSystemIsActive;
 
-    public static int moneyTotal;
-    public static int scoreCurrentLevel;
-    public static int scoreTotal;
+    public int moneyTotal;
+    public int scoreCurrentLevel;
+    public int scoreTotal;
 
-    public static bool pauseState;
-    public static bool levelLostFlag = false;
-    public static bool levelFinishFlag = false;
-    public static bool waitForUIContinue = false;
+    public bool pauseState;
+    public bool levelLostFlag = false;
+    public bool levelFinishFlag = false;
+    public bool waitForUIContinue = false;
 
-    public static Rect playArea;
-    public static Rect camArea;
+    public Rect playArea;
+    public Rect camArea;
 
-    public static Action OnGameSessionStart;
-    public static Action OnLevelStart;
-    public static Action OnLevelEndComplete;
-    public static Action OnLevelEndLost;
-    public static Action OnUpgradeMenuStart;
-    public static Action OnUpgradeMenuTransitionOut;
-    public static Action OnUpgradeMenuEnd;
-    public static Action OnGameOverMenuStart;
-    public static Action OnGameOverMenuTransitionOut;
-    public static Action<int> OnMoneyModified;
-    public static Action<bool> OnLifeSystemIsActiveModified;
-    public static Action<int> OnLivesCurrentModified;
-    public static Action<int> OnLifeContainersModified;
+    public Action OnGameSessionStart;
+    public Action OnLevelStart;
+    public Action OnLevelEndComplete;
+    public Action OnLevelEndLost;
+    public Action OnUpgradeMenuStart;
+    public Action OnUpgradeMenuTransitionOut;
+    public Action OnUpgradeMenuEnd;
+    public Action OnGameOverMenuStart;
+    public Action OnGameOverMenuTransitionOut;
+    public Action<int> OnMoneyModified;
+    public Action<bool> OnLifeSystemIsActiveModified;
+    public Action<int> OnLivesCurrentModified;
+    public Action<int> OnLifeContainersModified;
 
     private void Awake()
     {
-
         QualitySettings.vSyncCount = 0;
         //Application.targetFrameRate = 30;
 
         CalculatePlayArea();
-
     }
 
     private void Start()
@@ -74,7 +72,7 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator TryLevelCompleteSequence()
     {
-        float transitionDuration = TransitionUI.TRANSITION_DURATION;
+        float transitionDuration = TransitionSpriteUI.TRANSITION_DURATION;
 
         //Debug.Log($"Trying to end the level. Time: {Time.time}");
         levelFinishFlag = true;
@@ -124,7 +122,7 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator GameOverSequence()
     {
-        float transitionDuration = TransitionUI.TRANSITION_DURATION;
+        float transitionDuration = TransitionSpriteUI.TRANSITION_DURATION;
 
         //Wait for a short while to show player death
         yield return new WaitForSeconds(1f);

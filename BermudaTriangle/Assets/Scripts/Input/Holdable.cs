@@ -6,6 +6,11 @@ public class Holdable : Clickable
 {
     public static Clickable heldObject;
 
+    protected virtual void Awake()
+    {
+        heldObject = null;
+    }
+
     public override void OnBeginClick()
     {
         base.OnBeginClick();

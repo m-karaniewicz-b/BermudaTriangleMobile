@@ -5,8 +5,7 @@ using UnityEngine;
 public class TransitionSpriteUI : MonoBehaviour
 {
     public Sprite[] sprites;
-    public float duration = 1f;
-    //public float fps = 30;
+    public const float TRANSITION_DURATION = 1f;
 
     private SpriteRenderer sr;
 
@@ -14,15 +13,15 @@ public class TransitionSpriteUI : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
 
-        GameManager.OnUpgradeMenuTransitionOut += InitTransition;
+        GameManager.Instance.OnUpgradeMenuTransitionOut += InitTransition;
         //GameManager
-        GameManager.OnLevelEndComplete += InitTransition;
+        GameManager.Instance.OnLevelEndComplete += InitTransition;
     }
 
     public void InitTransition()
     {
         StopAllCoroutines();
-        StartCoroutine(AnimateSpritesCoroutine(sprites, duration));
+        StartCoroutine(AnimateSpritesCoroutine(sprites, TRANSITION_DURATION));
     }
 
     private IEnumerator AnimateSpritesCoroutine(Sprite[] animationSprites, float duration)

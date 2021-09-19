@@ -8,8 +8,13 @@ public class BackgroundController : Singleton<BackgroundController>
 
     private BackgroundData currentBG;
 
-    private Vector2 baseNoiseScrollCounter = Vector2.zero;
+    private Vector2 baseNoiseScrollCounter;
     private Vector2 baseNoiseScrollSpeed;
+
+    private void Awake()
+    {
+        baseNoiseScrollCounter = Vector2.zero;
+    }
 
     private void Update()
     {
@@ -18,6 +23,12 @@ public class BackgroundController : Singleton<BackgroundController>
 
     public void ChangeBackground(BackgroundData targetBackground, bool transition)
     {
+        if (targetBackground == null)
+        {
+            Debug.LogError("Missing target background");
+            return;
+        }
+
         if (transition)
         {
             StopAllCoroutines();
@@ -52,9 +63,9 @@ public class BackgroundController : Singleton<BackgroundController>
             }
 
             float textureStrength;
-            if (timer < midpoint * duration) 
+            if (timer < midpoint * duration)
                 textureStrength = Mathf.SmoothStep(currentBG.overlayTextureStrength, 0, timer / (duration * midpoint));
-            else 
+            else
                 textureStrength = Mathf.SmoothStep(0, targetBG.overlayTextureStrength, (timer - duration * midpoint) / (duration * (1 - midpoint)));
 
             ApplyBackgroundTextureStrength(textureStrength);

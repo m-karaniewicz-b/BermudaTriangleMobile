@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class MovingTarget : MonoBehaviour
 {
-    internal EnemyTypeData enemyType;
-
-    public static List<MovingTarget> respawnableMovingTargets = new List<MovingTarget>();
-
-    internal bool isActive = false;
-
     [Header("References")]
     public GameObject mainBody;
     public LineRenderer line;
@@ -17,26 +11,27 @@ public class MovingTarget : MonoBehaviour
     private SpriteRenderer sr;
 
     private const float START_DELAY_DEFAULT = 2f;
+    private const float PRTCL_TRAIL_BASE_RATE = 10f;
 
-    private float creationTime = -Mathf.Infinity;
-    private bool hasBeenVisible = false;
+    private float creationTime;
+    internal bool isActive;
+    private bool hasBeenVisible;
 
-    private float startDelay = Mathf.Infinity;
+    private float startDelayDuration;
     private Vector2 direction;
 
-    private float movementSpeed = 3;
-    private int lifeModOnKill = 0;
-    private int lifeModOnEscape = 0;
-    private int lifeModOnEyeCollision = 0;
-    private int pointModOnKill = 1;
-    private int pointModOnEscape = 0;
-    private int pointModOnEyeCollision = 0;
-    private bool canBeKilled = true;
-    private bool collideWithEye = false;
-    private bool destroyOnEyeCollision = false;
+    internal EnemyTypeData enemyType;
+    private float movementSpeed;
+    private int lifeModOnKill;
+    private int lifeModOnEscape;
+    private int lifeModOnEyeCollision;
+    private int pointModOnKill;
+    private int pointModOnEscape;
+    private int pointModOnEyeCollision;
+    private bool canBeKilled;
+    private bool collideWithEye;
+    private bool destroyOnEyeCollision;
 
-    //Visuals
-    private const float PRTCL_TRAIL_BASE_RATE = 10f;
     private Color color1;
     private Color color2;
 
@@ -77,11 +72,12 @@ public class MovingTarget : MonoBehaviour
     {
         StopAllCoroutines();
 
-        if (respawnableMovingTargets.Contains(this)) respawnableMovingTargets.Remove(this);
+        if (EntityManager.Instance.respawnableMovingTargets.Contains(this)) EntityManager.Instance.respawnableMovingTargets.Remove(this);
 
+        enemyType = type;
         gameObject.name = type.name;
         creationTime = Time.time;
-        startDelay = START_DELAY_DEFAULT;
+        startDelayDuration = START_DELAY_DEFAULT;
         hasBeenVisible = false;
 
         //Pass or apply EnemyTypeData values
@@ -111,7 +107,6 @@ public class MovingTarget : MonoBehaviour
             line.SetPositions(new Vector3[2] { startPoint, endPoint });
         }
 
-
         //Position and direction
         transform.position = startPoint;
         direction = (endPoint - startPoint).normalized;
@@ -122,7 +117,7 @@ public class MovingTarget : MonoBehaviour
 
     private IEnumerator InitFinalSequence()
     {
-        yield return new WaitForSeconds(startDelay);
+        yield return new WaitForSeconds(startDelayDuration);
 
         isActive = true;
         mainBody.SetActive(true);
@@ -134,24 +129,24 @@ public class MovingTarget : MonoBehaviour
     private void Escape()
     {
         DestroySelf();
-        GameManager.Instance.SetMoney(GameManager.moneyTotal + pointModOnEscape);
-        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnEscape);
+        GameManager.Instance.SetMoney(GameManager.Instance.moneyTotal + pointModOnEscape);
+        GameManager.Instance.SetLivesCurrent(GameManager.Instance.livesCurrent + lifeModOnEscape);
     }
 
     public void Kill()
     {
         if (!canBeKilled) return;
         DestroySelf();
-        GameManager.Instance.SetMoney(GameManager.moneyTotal + pointModOnKill);
-        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnKill);
+        GameManager.Instance.SetMoney(GameManager.Instance.moneyTotal + pointModOnKill);
+        GameManager.Instance.SetLivesCurrent(GameManager.Instance.livesCurrent + lifeModOnKill);
     }
 
     public void Collide()
     {
         if (!collideWithEye) return;
         if (destroyOnEyeCollision) DestroySelf();
-        GameManager.Instance.SetMoney(GameManager.moneyTotal + pointModOnEyeCollision);
-        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent + lifeModOnEyeCollision);
+        GameManager.Instance.SetMoney(GameManager.Instance.moneyTotal + pointModOnEyeCollision);
+        GameManager.Instance.SetLivesCurrent(GameManager.Instance.livesCurrent + lifeModOnEyeCollision);
     }
 
     private void DestroySelf()
@@ -188,7 +183,7 @@ public class MovingTarget : MonoBehaviour
         float duration = 5f;
         yield return new WaitForSeconds(duration);
 
-        respawnableMovingTargets.Add(this);
+        EntityManager.Instance.respawnableMovingTargets.Add(this);
 
         yield return null;
     }

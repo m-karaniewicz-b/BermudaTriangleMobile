@@ -11,6 +11,16 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     private static object m_Lock = new object();
     private static T m_Instance;
 
+    //protected bool resetInstanceOnAwake = true;
+
+    //private void Awake()
+    //{
+    //    if(resetInstanceOnAwake)
+    //    {
+    //        m_Instance = null;
+    //    }
+    //}
+
     /// <summary>
     /// Access singleton instance through this propriety.
     /// </summary>
@@ -41,7 +51,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                         singletonObject.name = typeof(T).ToString() + " (Singleton)";
 
                         // Make instance persistent.
-                        //DontDestroyOnLoad(singletonObject);
+                        DontDestroyOnLoad(singletonObject);
                     }
                 }
 
@@ -51,14 +61,14 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     }
 
 
-    private void OnApplicationQuit()
-    {
-        if(!Application.isEditor) m_ShuttingDown = true;
-    }
+    //private void OnApplicationQuit()
+    //{
+    //    m_ShuttingDown = true;
+    //}
 
 
-    private void OnDestroy()
-    {
-        if (!Application.isEditor) m_ShuttingDown = true;
-    }
+    //private void OnDestroy()
+    //{
+    //    m_ShuttingDown = true;
+    //}
 }

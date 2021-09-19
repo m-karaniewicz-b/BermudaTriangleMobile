@@ -5,8 +5,8 @@ using Sirenix.OdinInspector;
 [RequireComponent(typeof(LineRenderer))]
 public class RadiusDisplay : MonoBehaviour
 {
-    public int segmentsPerRadiusUnit = 20;
-    public int defaultRadius = 1;
+    [SerializeField] private int segmentsPerRadiusUnit = 20;
+    [SerializeField] private int defaultRadius = 1;
 
     private float radius;
     private int segments;

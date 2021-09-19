@@ -12,10 +12,10 @@ public class LevelData : ScriptableObject
 
     [TabGroup("Main Tabs","Background Tab")]
     [HideLabel]
-    public BackgroundData background = new BackgroundData();
+    public BackgroundData background;
 
     [FoldoutGroup("Main Tabs/Background Tab/Preview Settings")]
-    [SerializeField] private bool BackgroundAutoPreview = true;
+    [SerializeField] private static bool backgroundAutoPreview = false;
 
     [TabGroup("Main Tabs","Enemy Spawns")]
     public List<SpawnGroup> spawnGroups;
@@ -31,6 +31,13 @@ public class LevelData : ScriptableObject
         LevelManager.Instance.LoadLevelBackground(this, false);
     }
 
+    [FoldoutGroup("Main Tabs/Background Tab/Preview Settings")]
+    [Toggle("backgroundAutoPreview"), GUIColor(0.7f, 0.7f, 1)]
+    private void ToggleAutoPreview()
+    {
+        LevelManager.Instance.LoadLevelBackground(this, false);
+    }
+
     private void SetNameFromFile()
     {
         levelName = name;
@@ -38,7 +45,7 @@ public class LevelData : ScriptableObject
 
     private void OnValidate()
     {
-        if (BackgroundAutoPreview && Time.realtimeSinceStartup > 3f)
+        if (backgroundAutoPreview && Time.realtimeSinceStartup > 3f)
         {
             PreviewBackgroundInScene();
         }

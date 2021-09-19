@@ -6,39 +6,39 @@ public class EyeCenter : Holdable
 {
     public static EyeCenter instance;
 
-    [Header("Settings")]    
-    [SerializeField]private Color explosionRadiusVFXColor = Color.white;
-    [SerializeField]private float explosionRadiusVFXDuration = 1f;
-
-    private float chargeSpeed = 1f; //1 unit of radius per second
-    private float chargeRadiusMaxCurrent = CHARGE_RADIUS_MAX_DEFAULT;
-
     public const float CHARGE_RADIUS_MAX_DEFAULT = 1.2f;
     public const float CHARGE_RADIUS_MIN = 0.75f;
+    public const string HITBOX_TAG = "Hitbox";
 
-    private bool isCharging = false;
+    private bool isCharging;
+    private float chargeSpeed;
+    private float chargeRadiusMaxCurrent;
     private float chargeRadiusCurrent;
 
-    public LayerMask enemyTargetLayer;
-    public const string HITBOX_TAG = "Hitbox";
+    [Header("Settings")]    
+    [SerializeField] private Color explosionRadiusVFXColor = Color.white;
+    [SerializeField] private float explosionRadiusVFXDuration = 1f;
+    [SerializeField] private LayerMask enemyTargetLayer;
 
     [Header("References")]
     [SerializeField] private RadiusDisplay ChargeRadiusMaxIndicator;
     [SerializeField] private SpriteRenderer ChargeRadiusCurrentIndicator;
     [SerializeField] private CircleCollider2D attackCollider;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
+        instance = this;
+        base.Awake();
 
-        ChargeRadiusCurrentIndicator.enabled = false;
+        ResetCharging();
+        chargeRadiusMaxCurrent = CHARGE_RADIUS_MAX_DEFAULT;
+
     }
 
     private void Start()
     {
         SetChargeRadiusMax(chargeRadiusMaxCurrent);
-        ResetCharging();
+
     }
 
     private void Update()
@@ -69,6 +69,17 @@ public class EyeCenter : Holdable
 
             ResetCharging();
         }
+    }
+
+    public void SetChargeRadiusMax(float newRadius)
+    {
+        chargeRadiusMaxCurrent = newRadius;
+        ChargeRadiusMaxIndicator.SetRadius(newRadius);
+    }
+
+    public void SetChargeSpeed(float speed)
+    {
+        chargeSpeed = speed;
     }
 
     private void ResetCharging()
@@ -108,17 +119,6 @@ public class EyeCenter : Holdable
             AudioManager.Instance.Play("Miss");
             VFXManager.SpawnParticleExplosionOneShot(VFXManager.Instance.missVFX, transform.position, radius);
         }
-    }
-
-    public void SetChargeRadiusMax(float newRadius)
-    {
-        chargeRadiusMaxCurrent = newRadius;
-        ChargeRadiusMaxIndicator.SetRadius(newRadius);
-    }
-
-    public void SetChargeSpeed(float speed)
-    {
-        chargeSpeed = speed;
     }
 
     private void SetChargeRadiusCurrent(float newRadius)

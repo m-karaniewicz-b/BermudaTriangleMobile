@@ -6,35 +6,40 @@ public class EntityManager : Singleton<EntityManager>
 {
     private Rect playArea;
 
+    public List<MovingTarget> respawnableMovingTargets;
     //private Dictionary<EnemyTypeData, int> enemyTypeWeights;
-    private List<SpawnGroup> spawnGroups = new List<SpawnGroup>();
+    private List<SpawnGroup> spawnGroups;
 
     public MovingTarget movingTargetPrefab;
 
     internal EyeCenter theEye;
 
-    private float midPointMaxOffsetX = 0;
-    private float midPointMaxOffsetY = 5f;
+    private const float MID_POINT_MAX_OFFSET_X = 0;
+    private const float MID_POINT_MAX_OFFSET_Y = 5f;
+    private const float INITIAL_SPAWN_COOLDOWN = 5f;
+    private const float MOVE_BACK_OUT_OF_SIGHT_OFFSET = 2;
 
-    private float moveBackOutOfSightOffset = 2;
     private float indicatorEndPointOffset;
 
-    private float initialSpawnCooldown = 5f;
-
     private float currentSpawnCooldown;
-    private float lastSpawnTime = -Mathf.Infinity;
+    private float lastSpawnTime;
 
     private void Awake()
     {
         theEye = FindObjectOfType<EyeCenter>();
+
         LevelManager.OnLevelLoaded += LoadSpawnGroupList;
 
-        currentSpawnCooldown = initialSpawnCooldown;
+        respawnableMovingTargets = new List<MovingTarget>();
+        spawnGroups = new List<SpawnGroup>();
+        lastSpawnTime = -Mathf.Infinity;
+
+        currentSpawnCooldown = INITIAL_SPAWN_COOLDOWN;
     }
 
     private void Start()
     {
-        playArea = GameManager.playArea;
+        playArea = GameManager.Instance.playArea;
 
         //Better idea for offset?
         indicatorEndPointOffset = 2 * Mathf.Sqrt(Mathf.Pow(Camera.main.orthographicSize * 2, 2) +
@@ -71,8 +76,8 @@ public class EntityManager : Singleton<EntityManager>
 
         foreach (SpawnGroup entry in spawnGroups)
         {
-            if(entry.minLevelScore <= GameManager.scoreCurrentLevel 
-                && entry.maxLevelScore > GameManager.scoreCurrentLevel)
+            if(entry.minLevelScore <= GameManager.Instance.scoreCurrentLevel
+                && entry.maxLevelScore > GameManager.Instance.scoreCurrentLevel)
             {
                 allowedSpawnGroups.Add(entry);
             }
@@ -139,14 +144,14 @@ public class EntityManager : Singleton<EntityManager>
         Vector2 originPoint = playArea.center;
 
         Vector2 midPoint = new Vector2(
-            originPoint.x + UnityEngine.Random.Range(-1f, 1f) * midPointMaxOffsetX,
-            originPoint.y + UnityEngine.Random.Range(-1f, 1f) * midPointMaxOffsetY);
+            originPoint.x + UnityEngine.Random.Range(-1f, 1f) * MID_POINT_MAX_OFFSET_X,
+            originPoint.y + UnityEngine.Random.Range(-1f, 1f) * MID_POINT_MAX_OFFSET_Y);
 
         Vector2 screenEdgePoint = GetRandomEdgePointFromRect(playArea);
         Vector2 edgeToMid = midPoint - screenEdgePoint;
 
         Vector2 endPoint = edgeToMid * indicatorEndPointOffset;
-        Vector2 screenEdgePointOffsetted = screenEdgePoint - moveBackOutOfSightOffset * edgeToMid.normalized;
+        Vector2 screenEdgePointOffsetted = screenEdgePoint - MOVE_BACK_OUT_OF_SIGHT_OFFSET * edgeToMid.normalized;
 
         Debug.DrawLine(screenEdgePointOffsetted, endPoint, Color.red);
 
@@ -161,7 +166,7 @@ public class EntityManager : Singleton<EntityManager>
         Vector2 edgeToMid = midPoint - screenEdgePoint;
 
         Vector2 endPoint = edgeToMid * indicatorEndPointOffset;
-        Vector2 screenEdgePointOffsetted = screenEdgePoint - moveBackOutOfSightOffset * edgeToMid.normalized;
+        Vector2 screenEdgePointOffsetted = screenEdgePoint - MOVE_BACK_OUT_OF_SIGHT_OFFSET * edgeToMid.normalized;
 
         Debug.DrawLine(screenEdgePointOffsetted, endPoint, Color.red);
 
@@ -172,10 +177,10 @@ public class EntityManager : Singleton<EntityManager>
     {
         MovingTarget ret = null;
 
-        if (MovingTarget.respawnableMovingTargets.Count > 0)
+        if (respawnableMovingTargets.Count > 0)
         {
-            ret = MovingTarget.respawnableMovingTargets[0];
-            MovingTarget.respawnableMovingTargets.Remove(ret);
+            ret = respawnableMovingTargets[0];
+            respawnableMovingTargets.Remove(ret);
         }
         else
         {

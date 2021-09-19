@@ -6,21 +6,37 @@ using Sirenix.OdinInspector;
 public class UpgradeManager : Singleton<UpgradeManager>
 {
     [Header("Current Upgrade Stats")]
-    private int lifeContainers = 3;
-    private int controlPoints = 3;
+    private int lifeContainers;
+    private int controlPoints;
 
-    private int chargeMaxRadius = 0;
-    private int chargeSpeed = 0;
+    private int chargeMaxRadius;
+    private int chargeSpeed;
 
-    private int multikillBonusMoney = 0;
-    private int pointBonus = 0;
+    private int multikillBonusMoney;
+    private int pointBonus;
 
-    private int enemySpeedMod = 0;
-    private int enemyHealthMod = 0;
+    private int enemySpeedMod;
+    private int enemyHealthMod;
 
     private void Awake()
     {
+        GameManager.Instance.OnGameSessionStart += Init;
+    }
 
+    private void Init()
+    {
+        lifeContainers = 3;
+        controlPoints = 3;
+
+        chargeMaxRadius = 0;
+        chargeSpeed = 0;
+
+        multikillBonusMoney = 0;
+        pointBonus = 0;
+
+        enemySpeedMod = 0;
+        enemyHealthMod = 0;
+        UpdateUpgrades();
     }
 
     public void ApplyItem(ItemData item, bool unapply = false)
@@ -46,16 +62,16 @@ public class UpgradeManager : Singleton<UpgradeManager>
 
     private void ApplyOneTimeEffects(ItemData item)
     {
-        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent + item.lifeRestore);
-        GameManager.Instance.SetMoney(GameManager.moneyTotal + item.money);
+        GameManager.Instance.SetLivesCurrent(GameManager.Instance.livesCurrent + item.lifeRestore);
+        GameManager.Instance.SetMoney(GameManager.Instance.moneyTotal + item.money);
     }
 
     private void UpdateUpgrades()
     {
         GameManager.Instance.SetLifeContainers(lifeContainers);
 
-        if (Centroid.instance.GetControlPointCount() != controlPoints) 
-            Centroid.instance.InitControlPoints(controlPoints);
+        if (Centroid.Instance.GetControlPointCount() != controlPoints) 
+            Centroid.Instance.InitControlPoints(controlPoints);
 
 
         float newRadius = EyeCenter.CHARGE_RADIUS_MAX_DEFAULT + Remap(chargeMaxRadius, 20, 0, 5, 0.8f);
@@ -74,17 +90,5 @@ public class UpgradeManager : Singleton<UpgradeManager>
     {
         return firstFloat * (1 - by) + secondFloat * by;
     }
-
-
-    //[Button]
-    //private void CalculationDebug(int upgrade, float lowerEnd, float higherEnd, float curve)
-    //{
-    //    //float valueSoftcap = (baseN * fraction * upgrade) / (1 + fraction * upgrade);
-
-    //    float val = Mathf.Pow(upgrade * lowerEnd / higherEnd, curve);
-    //    float radius = Lerp(0, 5, val);
-
-    //    Debug.Log($"s = {radius}");
-    //}
 
 }

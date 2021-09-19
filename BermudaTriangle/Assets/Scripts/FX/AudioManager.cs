@@ -4,7 +4,7 @@ using System;
 
 public class AudioManager : Singleton<AudioManager>
 {
-    public float globalSFXCooldown = 0.15f;
+    public const float GLOBAL_SFX_COOLDOWN = 0.15f;
 
     private AudioSource musicSource;
     private AudioSource sfxSource;
@@ -48,7 +48,7 @@ public class AudioManager : Singleton<AudioManager>
         //Debug.Log($"Playing {name}");
         if (!s.isMusic)
         {
-            if(Time.time - s.lastStartTime > globalSFXCooldown)
+            if(Time.time - s.lastStartTime > GLOBAL_SFX_COOLDOWN)
             {
                 sfxSource.PlayOneShot(s.clip, s.sfxVolume);
                 s.lastStartTime = Time.time;

@@ -17,10 +17,11 @@ public class OptionUI : MonoBehaviour
 
     public static event Action<int> OnOptionSelected;
 
-    public bool isSold = false;
+    public bool isSold;
 
     private void Awake()
     {
+        isSold = false;
         CheckReferences();
     }
 

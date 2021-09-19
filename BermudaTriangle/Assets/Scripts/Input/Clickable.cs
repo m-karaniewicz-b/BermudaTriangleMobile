@@ -7,8 +7,8 @@ public class Clickable : MonoBehaviour
     private static List<Clickable> clickables;
 
     [Header("Clickable")]
-    public int priority = 0;
-    public float maxClickRadius = 5;
+    [SerializeField] private int priority = 0;
+    [SerializeField] private float maxClickRadius = 5;
 
     public virtual void OnBeginClick() { }
     public virtual void OnEndClick() { }

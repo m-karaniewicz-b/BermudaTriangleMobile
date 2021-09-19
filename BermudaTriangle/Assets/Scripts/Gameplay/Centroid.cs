@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public class Centroid : MonoBehaviour
+public class Centroid : Singleton<Centroid>
 {
-    public static Centroid instance;
-
-    private int startingPointCount = 3;
     private int currentPointCount;
 
     [Header("References")]
@@ -16,14 +13,6 @@ public class Centroid : MonoBehaviour
     [SerializeField] private LineRenderer lineRend;
 
     [SerializeField] private Transform[] controlPoints;
-
-    private void Awake()
-    {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
-        GameManager.OnGameSessionStart += SessionStart;
-        //GameManager.OnUpgradeMenuEnd += UpgradeEnd;
-    }
 
     private void Update()
     {
@@ -64,11 +53,6 @@ public class Centroid : MonoBehaviour
         UpdateLineRenderer();
     }
 
-    private void SessionStart()
-    {
-        InitControlPoints(startingPointCount);
-    }
-
     public int GetControlPointCount()
     {
         return currentPointCount;
@@ -97,26 +81,26 @@ public class Centroid : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    private void ClearControlPointsEditor()
-    {
-        if (controlPoints == null) return;
+    //private void ClearControlPointsEditor()
+    //{
+    //    if (controlPoints == null) return;
 
-        int len = controlPoints.Length;
-        for (int i = len - 1; i >= 0; i--)
-        {
-            if (controlPoints[i] != null)
-                DestroyImmediate(controlPoints[i].gameObject);
-        }
+    //    int len = controlPoints.Length;
+    //    for (int i = len - 1; i >= 0; i--)
+    //    {
+    //        if (controlPoints[i] != null)
+    //            DestroyImmediate(controlPoints[i].gameObject);
+    //    }
 
-        controlPoints = null;
-    }
+    //    controlPoints = null;
+    //}
 
-    [Button]
-    private void UpdatePointsInEditor()
-    {
-        ClearControlPointsEditor();
+    //[Button]
+    //private void UpdatePointsInEditor()
+    //{
+    //    ClearControlPointsEditor();
 
-        InitControlPoints(startingPointCount);
-    }
+    //    InitControlPoints(startingPointCount);
+    //}
 #endif
 }

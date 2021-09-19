@@ -6,7 +6,7 @@ using TMPro;
 
 public class Loading : MonoBehaviour
 {
-    public TextMeshProUGUI loadingText;
+    [SerializeField] private TextMeshProUGUI loadingText;
 
     void Start()
     {

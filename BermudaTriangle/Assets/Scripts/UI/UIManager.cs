@@ -19,24 +19,25 @@ public class UIManager : Singleton<UIManager>
     public Color fullLifeContainerColor;
     public Color emptyLifeContainerColor;
 
-    private List<Image> lifeContainers = new List<Image>();
+    private List<Image> lifeContainers;
 
     private void Awake()
     {
-        GameManager.OnGameSessionStart += UIReset;
-        GameManager.OnGameSessionStart += HideGameOverMenu;
-        GameManager.OnMoneyModified += UpdateMoneyDisplay;
-        GameManager.OnLifeSystemIsActiveModified += SetLivesDisplayActive;
-        GameManager.OnLivesCurrentModified += UpdateLivesCurrentDisplay;
-        GameManager.OnLifeContainersModified += UpdateLivesMaxDisplay;
-        GameManager.OnLevelEndLost += ShowGameOverMenu;
-        GameManager.OnUpgradeMenuStart += ShowUpgradeMenu;
-        GameManager.OnUpgradeMenuEnd += HideUpgradeMenu;
+        GameManager.Instance.OnGameSessionStart += UIReset;
+        GameManager.Instance.OnGameSessionStart += HideGameOverMenu;
+        GameManager.Instance.OnMoneyModified += UpdateMoneyDisplay;
+        GameManager.Instance.OnLifeSystemIsActiveModified += SetLivesDisplayActive;
+        GameManager.Instance.OnLivesCurrentModified += UpdateLivesCurrentDisplay;
+        GameManager.Instance.OnLifeContainersModified += UpdateLivesMaxDisplay;
+        GameManager.Instance.OnLevelEndLost += ShowGameOverMenu;
+        GameManager.Instance.OnUpgradeMenuStart += ShowUpgradeMenu;
+        GameManager.Instance.OnUpgradeMenuEnd += HideUpgradeMenu;
 
         PauseMenuParent.SetActive(false);
         UpgradeMenuParent.SetActive(false);
         GameOverMenuParent.SetActive(false);
 
+        lifeContainers = new List<Image>();
         foreach (Transform entry in LifeDisplayParent.transform)
         {
             Image img = entry.GetComponent<Image>();

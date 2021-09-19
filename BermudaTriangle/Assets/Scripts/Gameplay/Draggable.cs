@@ -10,7 +10,7 @@ public class Draggable : Holdable
         {
             Vector2 newPos = InputManager.GetCursorPosition();
 
-            Rect dragArea = GameManager.camArea;
+            Rect dragArea = GameManager.Instance.camArea;
 
             newPos = new Vector3(
                 Mathf.Clamp(newPos.x, dragArea.xMin, dragArea.xMax),

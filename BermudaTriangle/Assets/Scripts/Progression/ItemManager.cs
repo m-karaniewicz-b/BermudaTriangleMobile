@@ -5,17 +5,20 @@ using UnityEngine;
 public class ItemManager : Singleton<ItemManager>
 {
     public const int MAXIMUM_SHOP_SIZE = 8;
-
-    public List<PremadeItemData> premadeItemObjects = new List<PremadeItemData>();
-
-    [HideInInspector] public List<ItemData> ownedItems = new List<ItemData>();
-    private List<ItemData> buyableItems = new List<ItemData>();
-
+    
+    [SerializeField] private List<PremadeItemData> premadeItemObjects;
     [SerializeField] private ItemShopUI shopUI;
+
+    [HideInInspector] public List<ItemData> ownedItems;
+    private List<ItemData> buyableItems;
+
 
     private void Awake()
     {
-        GameManager.OnUpgradeMenuStart += PopulateUpgradeShop;
+        GameManager.Instance.OnUpgradeMenuStart += PopulateUpgradeShop;
+
+        ownedItems = new List<ItemData>();
+        buyableItems = new List<ItemData>();
     }
 
     public void GrantItem(ItemData item)
@@ -27,9 +30,9 @@ public class ItemManager : Singleton<ItemManager>
 
     private void PayItemCosts(ItemData item)
     {
-        GameManager.Instance.SetMoney(GameManager.moneyTotal - item.costMoney);
-        GameManager.Instance.SetLivesCurrent(GameManager.livesCurrent - item.costLivesCurrent);
-        GameManager.Instance.SetLifeContainers(GameManager.lifeContainers - item.costLifeContainers);
+        GameManager.Instance.SetMoney(GameManager.Instance.moneyTotal - item.costMoney);
+        GameManager.Instance.SetLivesCurrent(GameManager.Instance.livesCurrent - item.costLivesCurrent);
+        GameManager.Instance.SetLifeContainers(GameManager.Instance.lifeContainers - item.costLifeContainers);
     }
 
     private void PopulateUpgradeShop()
@@ -69,9 +72,9 @@ public class ItemManager : Singleton<ItemManager>
         bool[] vals = new bool[buyableItems.Count];
         for (int i = 0; i < buyableItems.Count; i++)
         {
-            vals[i] = (buyableItems[i].costMoney <= GameManager.moneyTotal &&
-                buyableItems[i].costLifeContainers < GameManager.lifeContainers &&
-                buyableItems[i].costLivesCurrent < GameManager.livesCurrent);
+            vals[i] = (buyableItems[i].costMoney <= GameManager.Instance.moneyTotal &&
+                buyableItems[i].costLifeContainers < GameManager.Instance.lifeContainers &&
+                buyableItems[i].costLivesCurrent < GameManager.Instance.livesCurrent);
         }
         return vals;
     }

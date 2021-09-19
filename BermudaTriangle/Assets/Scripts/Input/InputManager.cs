@@ -6,7 +6,7 @@ public class InputManager : Singleton<InputManager>
 {
     private void Update()
     {
-        if(GameManager.pauseState != true)
+        if(GameManager.Instance.pauseState != true)
         {
             if(Application.isEditor)
             {

@@ -25,7 +25,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OverlayTexture:
-        m_Texture: {fileID: 2800000, guid: a78bffbeb81b48ae9ec71ad7969613e5, type: 3}
+        m_Texture: {fileID: 2800000, guid: e31debc8f526893478ba8f07dde66cb9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -41,12 +41,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _BaseNoiseScale: 8.87
-    - _CircleDistortionHardiness: 1
-    - _CircleDistortionRadius: 0
-    - _Crossover1to2: 0.6911898
-    - _Crossover2to3: 1
-    - _OverlayTextureStrength: 2.8
+    - _BaseNoiseScale: 6.67
+    - _CircleDistortionHardiness: 0.87
+    - _CircleDistortionRadius: 0.493
+    - _Crossover1to2: 0.58825314
+    - _Crossover2to3: 0.7517409
+    - _OverlayTextureStrength: 0
+    - _ScalingNoiseScale: 10
+    - _ScalingNoiseStrength: 1
     - _TextureStrength: 1
     - _VoronoiAngleOffset: 10
     - _VoronoiAngleOffsetInput: 10
@@ -55,9 +57,10 @@ Material:
     m_Colors:
     - _BaseNoiseScrollOffset: {r: 0, g: 0, b: 0, a: 0}
     - _BaseNoiseScrollOffsetInput: {r: 0, g: 0, b: 0, a: 0}
-    - _Color1: {r: 0.2691349, g: 0.9056604, b: 0.86791646, a: 1}
-    - _Color2: {r: 0.4784314, g: 0.98039216, b: 0.54535955, a: 1}
-    - _Color3: {r: 0.7106155, g: 0.823, b: 0.636179, a: 1}
+    - _Color1: {r: 0.37126204, g: 0.66214526, b: 0.764151, a: 1}
+    - _Color2: {r: 0.3529412, g: 0.48228928, b: 0.5058824, a: 1}
+    - _Color3: {r: 1, g: 0.4481132, b: 0.4481132, a: 1}
+    - _ScalingNoiseScrollOffsetInput: {r: 0, g: 0, b: 0, a: 0}
     - _ScrollPosition: {r: 0, g: 0, b: 0, a: 0}
     - _VoronoiScrollOffset: {r: 0, g: 0, b: 0, a: 0}
     - _VoronoiScrollOffsetInput: {r: 0, g: 0, b: 0, a: 0}

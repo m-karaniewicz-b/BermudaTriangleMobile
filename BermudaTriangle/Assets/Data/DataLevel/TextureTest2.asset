@@ -20,11 +20,10 @@ MonoBehaviour:
     crossover: {x: 0.6911898, y: 1}
     circleDistortionRadius: 0
     circleDistortionHardiness: 1
-    baseNoiseScale: 8.87
+    baseNoiseScale: 8.93
     baseNoiseScrollSpeed: {x: 0, y: 0}
-    overlayTextureStrength: 2.8
+    overlayTextureStrength: 2.32
     overlayTexture: {fileID: 2800000, guid: a78bffbeb81b48ae9ec71ad7969613e5, type: 3}
-  BackgroundAutoPreview: 1
   spawnGroups:
   - weight: 100
     minLevelScore: 0

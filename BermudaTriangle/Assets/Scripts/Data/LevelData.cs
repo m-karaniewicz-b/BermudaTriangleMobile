@@ -38,6 +38,24 @@ public class LevelData : ScriptableObject
         LevelManager.Instance.LoadLevelBackground(this, false);
     }
 
+    // [DisableIf("Toggle")]
+    // [HorizontalGroup("Split", 0.5f)]
+    // [Button(ButtonSizes.Large), GUIColor(0.4f, 0.8f, 1)]
+    // private void FanzyButton1()
+    // {
+    //     this.Toggle = !this.Toggle;
+    // }
+
+    // [HideIf("Toggle")]
+    // [VerticalGroup("Split/right")]
+    // [Button(ButtonSizes.Large), GUIColor(0, 1, 0)]
+    // private void FanzyButton2()
+    // {
+    //     this.Toggle = !this.Toggle;
+    // }
+
+
+
     private void SetNameFromFile()
     {
         levelName = name;

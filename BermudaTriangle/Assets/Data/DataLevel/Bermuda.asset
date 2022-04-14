@@ -14,15 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelName: Bermuda
   background:
-    scrollSpeed: {x: 1, y: 1}
-    crossover1to2: 0.5
-    crossover2to3: 0.7
     color1: {r: 1, g: 1, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     color3: {r: 1, g: 1, b: 1, a: 1}
+    crossover: {x: 0.5, y: 0.7}
     baseNoiseScale: 10
-    circleDistortionRadius: 0.7
-    circleDistortionHardiness: 0.8
+    baseNoiseScrollSpeed: {x: 1, y: 1}
+    scalingNoiseScale: 10
+    scalingNoiseStrength: 1
+    scalingNoiseScrollSpeed: {x: 0, y: 0}
+    overlayTextureStrength: 1
+    overlayTexture: {fileID: 0}
   spawnGroups:
   - weight: 75
     minLevelScore: 0

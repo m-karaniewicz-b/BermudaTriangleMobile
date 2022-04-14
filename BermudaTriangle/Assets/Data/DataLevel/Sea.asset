@@ -12,8 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e7cfcc312af4fe479f9fbb1c5bf824f, type: 3}
   m_Name: Sea
   m_EditorClassIdentifier: 
-  backgroundMat: {fileID: 2100000, guid: 390b0fe81fe0ef94296c5712b3190170, type: 2}
-  borderMat: {fileID: 2100000, guid: 025561ec27838d349898106a362211a9, type: 2}
+  levelName: 
+  background:
+    color1: {r: 1, g: 1, b: 1, a: 1}
+    color2: {r: 1, g: 1, b: 1, a: 1}
+    color3: {r: 1, g: 1, b: 1, a: 1}
+    crossover: {x: 0.5, y: 0.7}
+    baseNoiseScale: 10
+    baseNoiseScrollSpeed: {x: 1, y: 1}
+    scalingNoiseScale: 10
+    scalingNoiseStrength: 1
+    scalingNoiseScrollSpeed: {x: 0, y: 0}
+    overlayTextureStrength: 1
+    overlayTexture: {fileID: 0}
   spawnGroups:
   - weight: 100
     minLevelScore: 0

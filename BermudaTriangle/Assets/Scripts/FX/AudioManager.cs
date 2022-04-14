@@ -10,7 +10,7 @@ public class AudioManager : Singleton<AudioManager>
     private AudioSource sfxSource;
 
     public Sound[] sounds;
-
+    
     private void Awake()
     {
         musicSource = new GameObject().AddComponent<AudioSource>();

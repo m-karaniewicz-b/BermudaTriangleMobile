@@ -13,12 +13,12 @@ public class BackgroundData
     [MinMaxSlider(0, 1, true)]
     public Vector2 crossover = new Vector2(0.5f, 0.7f);
 
-    [Range(0, 1)]
-    public float circleDistortionRadius = 0.7f;
-    public float circleDistortionHardiness = 0.8f;
-
     public float baseNoiseScale = 10;
     public Vector2 baseNoiseScrollSpeed = new Vector2(1, 1);
+
+    public float scalingNoiseScale = 10;
+    public float scalingNoiseStrength = 1;
+    public Vector2 scalingNoiseScrollSpeed = Vector2.zero;
 
     public float overlayTextureStrength = 1;
     public Texture2D overlayTexture;
@@ -34,18 +34,16 @@ public class BackgroundData
         bg.color3 = Color.Lerp(start.color3, end.color3, value);
 
         bg.crossover = Vector2.Lerp(start.crossover, end.crossover, value);
-        //bg.crossover = new Vector2(Mathf.Lerp(start.crossover2to3, end.crossover2to3, value);
-        //bg.crossover2to3 = Mathf.Lerp(start.crossover2to3, end.crossover2to3, value);
-        //bg.crossover1to2 = Mathf.Lerp(start.crossover1to2, end.crossover1to2, value);
 
         bg.baseNoiseScale = Mathf.Lerp(start.baseNoiseScale, end.baseNoiseScale, value);
         bg.baseNoiseScrollSpeed = Vector2.Lerp(start.baseNoiseScrollSpeed, end.baseNoiseScrollSpeed, value);
 
         bg.overlayTextureStrength = Mathf.Lerp(start.overlayTextureStrength, end.overlayTextureStrength, value);
-
-        bg.circleDistortionRadius = Mathf.Lerp(start.circleDistortionRadius, end.circleDistortionRadius, value);
-        bg.circleDistortionHardiness = Mathf.Lerp(start.circleDistortionHardiness, end.circleDistortionHardiness, value);
-
+        
+        bg.scalingNoiseScale = Mathf.Lerp(start.scalingNoiseScale, end.scalingNoiseScale, value);
+        bg.scalingNoiseStrength = Mathf.Lerp(start.scalingNoiseStrength, end.scalingNoiseStrength, value);
+        bg.scalingNoiseScrollSpeed = Vector2.Lerp(start.scalingNoiseScrollSpeed, end.scalingNoiseScrollSpeed, value);
+        
         return bg;
     }
 }

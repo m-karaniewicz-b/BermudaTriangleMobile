@@ -17,14 +17,14 @@ MonoBehaviour:
     color1: {r: 0.8666667, g: 0.30588233, b: 0.50273037, a: 1}
     color2: {r: 0.504, g: 0.35380802, b: 0.35380802, a: 1}
     color3: {r: 0.745283, g: 0.56566983, b: 0.61158556, a: 1}
-    crossover: {x: 0.21283686, y: 0.2976083}
-    circleDistortionRadius: 0.478
-    circleDistortionHardiness: 1.39
-    baseNoiseScale: 32.78
+    crossover: {x: 0.21283686, y: 0.57760316}
+    baseNoiseScale: 2.38
     baseNoiseScrollSpeed: {x: 1, y: 1}
-    overlayTextureStrength: -0.5
-    overlayTexture: {fileID: 2800000, guid: 7f1ee5cf274c8024b948782cd98e2766, type: 3}
-  BackgroundAutoPreview: 1
+    scalingNoiseScale: 1
+    scalingNoiseStrength: 1
+    scalingNoiseScrollSpeed: {x: 0, y: 0}
+    overlayTextureStrength: 0
+    overlayTexture: {fileID: 0}
   spawnGroups:
   - weight: 100
     minLevelScore: 0

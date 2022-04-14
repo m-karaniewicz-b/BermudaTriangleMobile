@@ -15,7 +15,7 @@ public class OptionUI : MonoBehaviour
     public GameObject soldOverlay;
     public GameObject availableOverlay;
 
-    public static event Action<int> OnOptionSelected;
+    public static event Action<int> OnOptionSelected = null;
 
     public bool isSold;
 
@@ -66,8 +66,10 @@ public class OptionUI : MonoBehaviour
     {
         if (!isSold)
         {
+            if(buyButton==null) Debug.Log(gameObject.name);
+            else buyButton.enabled = isAvailable;
+            
             availableOverlay.SetActive(!isAvailable);
-            buyButton.enabled = isAvailable;
         }
     }
 }

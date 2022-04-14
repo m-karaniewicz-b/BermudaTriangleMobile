@@ -32,10 +32,11 @@ public class ItemShopUI : MonoBehaviour
 
     public void UpdateItemAvailability()
     {
-        bool[] values = ItemManager.Instance.GetItemAvailabilities(); 
-
+        bool[] values = ItemManager.Instance.GetItemAvailabilities();
+        
         for (int i = 0; i < values.Length; i++)
         {
+            //Debug.Log($"Button {i}: {values[i]}" );
             optionDiplays[i].SetAvailability(values[i]);
         }
     }

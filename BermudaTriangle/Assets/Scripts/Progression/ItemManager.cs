@@ -37,7 +37,7 @@ public class ItemManager : Singleton<ItemManager>
 
     private void PopulateUpgradeShop()
     {
-        int itemCount = 4;//UnityEngine.Random.Range(1, 9);
+        int itemCount = 8;//UnityEngine.Random.Range(1, 9);
         
         itemCount = Mathf.Clamp(itemCount,0,MAXIMUM_SHOP_SIZE);
 

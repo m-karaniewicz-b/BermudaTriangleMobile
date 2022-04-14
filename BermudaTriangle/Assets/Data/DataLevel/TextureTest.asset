@@ -18,10 +18,11 @@ MonoBehaviour:
     color2: {r: 0.3529412, g: 0.48228928, b: 0.5058824, a: 1}
     color3: {r: 1, g: 0.4481132, b: 0.4481132, a: 1}
     crossover: {x: 0.58825314, y: 0.7517409}
-    circleDistortionRadius: 0.493
-    circleDistortionHardiness: 0.87
     baseNoiseScale: 6.67
     baseNoiseScrollSpeed: {x: -0.5, y: -0.5}
+    scalingNoiseScale: 10
+    scalingNoiseStrength: 1
+    scalingNoiseScrollSpeed: {x: 0, y: 0}
     overlayTextureStrength: 0
     overlayTexture: {fileID: 2800000, guid: e31debc8f526893478ba8f07dde66cb9, type: 3}
   spawnGroups:

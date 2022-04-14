@@ -48,7 +48,7 @@ public class LevelManager : Singleton<LevelManager>
         else
         {
             LoadLevel(0);
-            Debug.Log("Level loop");
+            //Debug.Log("Level loop");
         }
     }
 }

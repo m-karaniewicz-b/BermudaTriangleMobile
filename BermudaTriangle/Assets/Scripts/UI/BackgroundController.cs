@@ -11,9 +11,13 @@ public class BackgroundController : Singleton<BackgroundController>
     private Vector2 baseNoiseScrollCounter;
     private Vector2 baseNoiseScrollSpeed;
 
+    private Vector2 scalingNoiseScrollCounter;
+    private Vector2 scalingNoiseScrollSpeed;
+
     private void Awake()
     {
         baseNoiseScrollCounter = Vector2.zero;
+        scalingNoiseScrollCounter = Vector2.zero;
     }
 
     private void Update()
@@ -86,7 +90,28 @@ public class BackgroundController : Singleton<BackgroundController>
         baseNoiseScrollCounter.y += Time.deltaTime * baseNoiseScrollSpeed.y;
 
         targetSR.material.SetVector("_BaseNoiseScrollOffsetInput", baseNoiseScrollCounter);
+
+        scalingNoiseScrollCounter.x += Time.deltaTime * scalingNoiseScrollSpeed.x;
+        scalingNoiseScrollCounter.y += Time.deltaTime * scalingNoiseScrollSpeed.y;
+
+        targetSR.material.SetVector("_ScalingNoiseScrollOffsetInput", scalingNoiseScrollCounter);
+    }    
+    
+    public void UpdateTimeControlledParametersEditor()
+    {
+        Debug.Log("parameters updated");
+        baseNoiseScrollCounter.x += Time.fixedDeltaTime * baseNoiseScrollSpeed.x;
+        baseNoiseScrollCounter.y += Time.fixedDeltaTime * baseNoiseScrollSpeed.y;
+
+        targetSR.sharedMaterial.SetVector("_BaseNoiseScrollOffsetInput", baseNoiseScrollCounter);
+
+        scalingNoiseScrollCounter.x += Time.fixedDeltaTime * scalingNoiseScrollSpeed.x;
+        scalingNoiseScrollCounter.y += Time.fixedDeltaTime * scalingNoiseScrollSpeed.y;
+
+        targetSR.sharedMaterial.SetVector("_ScalingNoiseScrollOffsetInput", scalingNoiseScrollCounter);
     }
+    
+    
 
     private void ApplyBackgroundTexture(Texture2D tex)
     {
@@ -101,6 +126,7 @@ public class BackgroundController : Singleton<BackgroundController>
     private void ApplyBackgroundData(BackgroundData data, bool transition = true)
     {
         baseNoiseScrollSpeed = data.baseNoiseScrollSpeed;
+        scalingNoiseScrollSpeed = data.scalingNoiseScrollSpeed;
 
         if (Application.isPlaying)
         {
@@ -110,13 +136,13 @@ public class BackgroundController : Singleton<BackgroundController>
             targetSR.material.SetFloat("_Crossover1to2", data.crossover.x);
             targetSR.material.SetFloat("_Crossover2to3", data.crossover.y);
             targetSR.material.SetFloat("_BaseNoiseScale", data.baseNoiseScale);
-            targetSR.material.SetFloat("_CircleDistortionRadius", data.circleDistortionRadius);
-            targetSR.material.SetFloat("_CircleDistortionHardiness", data.circleDistortionHardiness);
+            targetSR.material.SetFloat("_ScalingNoiseScale", data.scalingNoiseScale);
+            targetSR.material.SetFloat("_ScalingNoiseStrength", data.scalingNoiseStrength);
 
             if (!transition)
             {
-                targetSR.sharedMaterial.SetFloat("_OverlayTextureStrength", data.overlayTextureStrength);
-                targetSR.sharedMaterial.SetTexture("_OverlayTexture", data.overlayTexture);
+                targetSR.material.SetFloat("_OverlayTextureStrength", data.overlayTextureStrength);
+                targetSR.material.SetTexture("_OverlayTexture", data.overlayTexture);
             }
 
         }
@@ -128,8 +154,8 @@ public class BackgroundController : Singleton<BackgroundController>
             targetSR.sharedMaterial.SetFloat("_Crossover1to2", data.crossover.x);
             targetSR.sharedMaterial.SetFloat("_Crossover2to3", data.crossover.y);
             targetSR.sharedMaterial.SetFloat("_BaseNoiseScale", data.baseNoiseScale);
-            targetSR.sharedMaterial.SetFloat("_CircleDistortionRadius", data.circleDistortionRadius);
-            targetSR.sharedMaterial.SetFloat("_CircleDistortionHardiness", data.circleDistortionHardiness);
+            targetSR.sharedMaterial.SetFloat("_ScalingNoiseScale", data.scalingNoiseScale);
+            targetSR.sharedMaterial.SetFloat("_ScalingNoiseStrength", data.scalingNoiseStrength);
 
             targetSR.sharedMaterial.SetFloat("_OverlayTextureStrength", data.overlayTextureStrength);
             targetSR.sharedMaterial.SetTexture("_OverlayTexture", data.overlayTexture);

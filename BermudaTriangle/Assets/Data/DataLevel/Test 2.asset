@@ -18,13 +18,13 @@ MonoBehaviour:
     color2: {r: 0.3529412, g: 0.48228928, b: 0.5058824, a: 1}
     color3: {r: 0.5647059, g: 0.74509805, b: 0.6686895, a: 1}
     crossover: {x: 0.5, y: 0.7}
-    circleDistortionRadius: 0.683
-    circleDistortionHardiness: 0.5
-    baseNoiseScale: 9.5
-    baseNoiseScrollSpeed: {x: 1, y: 1}
+    baseNoiseScale: 2.91
+    baseNoiseScrollSpeed: {x: 0, y: -0.53}
+    scalingNoiseScale: 1
+    scalingNoiseStrength: 1
+    scalingNoiseScrollSpeed: {x: 0, y: 0}
     overlayTextureStrength: 0
     overlayTexture: {fileID: 0}
-  BackgroundAutoPreview: 1
   spawnGroups:
   - weight: 100
     minLevelScore: 0
